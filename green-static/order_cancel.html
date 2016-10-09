@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/index.css?v=2015102710">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <title>订单-已取消</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <ul class="mui-flex">
+                <li class=" cell"><a href="order.html">当前预约<span class="order01">0</span></a></li>
+                <li class="cell"><a href="order_doing.html">充电中<span class="order02">0</span></a></li>
+                <li class="cell"><a href="order_paid.html">待支付<span class="order03">0</span></a></li>
+                <li class="current last cell"><a href="order_cancel.html">已取消<span class="order04">0</span></a></li>
+            </ul>
+        </div>
+        <div class="order-main">
+            <!-- <div class="list">
+                <p class="p1">
+                    <label>安德门充电站安德门充电站安德门充电站</label>
+                    <span class="span01">1#直流桩</span>
+                    <span class="fr span03"></span>
+                    <span class="fr span02"></span>
+                </p>
+                <p class="p2">
+                    <span class="fl"></span>
+                    <label class="label01 fl">安德门大街15号安德门大街15号安德门大街15号</label>
+                    <label class="label02 fl"><em class="fl">3.2345</em>km</label>
+                </p>
+                <div class="con">
+                    <div class="fl">
+                        <p class="p01">13:00</p>
+                        <p class="p02">2015/08/08</p>
+                    </div>
+                    <div class="center">
+                        <p class="p01">共3小时</p>
+                        <p class="p02">苏A 8988J</p>
+                    </div>
+                    <div class="fr">
+                        <p class="p01">16:00</p>
+                        <p class="p02">2015/08/08</p>
+                    </div>
+                </div>
+                <div class="btn">
+                    <ul class="fl">
+                        <li class="here"><span></span>到这里</li>
+                        <li class="cancel"><span></span>取消预约</li>
+                    </ul>
+                    <div class="fr green-btn">
+                        <label>开始充电</label>
+                        <span></span>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+        <div class="order-cancel-main">
+            <p class="img"></p>
+            <p class="txt">亲，您当前没有取消的预约哦</p>
+        </div>
+        <div class="footer">
+            <ul class="mui-flex">
+                <li class="li01 cell"><a href="index.html"><span></span></a></li>
+                <li class="li02-current current cell to-order"><a><span></span></a></li>
+                <li class="li03 cell to-appointment"><a><span></span></a></li>
+                <li class="li04 cell" onclick="inputScan();" id="btn"><a href="javascript:void(0);"><span></span></a></li>
+                <li class="li05 cell"><a href="common_function.html"><span></span></a></li>
+            </ul>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/barcodescanner.js"></script>
+    <script type="text/javascript">
+    $(function(){
+
+        // 读取已取消订单
+        currentOrderCancel();
+        function currentOrderCancel(){
+            var identity=1;
+            var cardNo=getLocalStorage("cardno");
+            var pass=getLocalStorage("pass");
+            var car=getLocalStorage("car");
+            var data={
+                identity: identity,
+                cardNo: cardNo,
+                pass: pass
+            }
+            var url="IcCardWebService/getDispBespeakPole";
+            ajaxGetRequest(url, data, callback);
+            function callback(result) {
+                var a=processData(result);
+                tipInformation(a.message,function(){});
+                if(a.success){
+                    if(a.list.length<10){
+                        $(".order04").text(a.list.length);
+                    }else{
+                        $(".order04").addClass(".points");
+                        $(".order04").text("...");
+                    }
+                    if(a.list.length>0){
+                        var html = "";
+                        for(var i=0; i<a.list.length; i++){
+                            var startDate=formatterDate(parseInt(a.list[i].startTime));
+                            var startTime=formatterTime(parseInt(a.list[i].startTime));
+                            var finishDate=formatterDate(parseInt(a.list[i].finishTime));
+                            var finishTime=formatterTime(parseInt(a.list[i].finishTime));
+                            var time=(parseInt(a.list[i].finishTime)-parseInt(a.list[i].startTime))/3600000;
+                            var minutes=(parseInt(a.list[i].finishTime)-parseInt(a.list[i].startTime))/60000;
+
+                            html += '<div class="list">';
+                            html += '    <p class="p1">';
+                            html += '        <label>'+a.list[i].name+'</label>';
+                            html += '        <span class="span01">1#直流桩</span>';
+                            html += '        <span class="fr span03"></span>';
+                            html += '        <span class="fr span02"><a href="tel:"></a></span>';
+                            html += '    </p>';
+                            html += '    <p class="p2">';
+                            html += '        <span class="fl"></span>';
+                            html += '        <label class="fl">'+a.list[i].addr+'</label>';
+                            html += '        <label class="label02 fl"><em class="fl">3.2345</em>km</label>';
+                            html += '    </p>';
+                            html += '    <div class="con">';
+                            html += '        <div class="fl">';
+                            html += '            <p class="p01">'+startTime+'</p>';
+                            html += '            <p class="p02">'+startDate+'</p>';
+                            html += '        </div>';
+                            html += '        <div class="center">';
+                            html += '            <p class="p01">共'+time+'小时</p>';
+                            html += '            <p class="p02">'+car+'</p>';
+                            html += '        </div>';
+                            html += '        <div class="fr">';
+                            html += '            <p class="p01">'+finishTime+'</p>';
+                            html += '            <p class="p02">'+finishDate+'</p>';
+                            html += '        </div>';
+                            html += '    </div>';
+                            html += '    <div class="btn">';
+                            html += '        <ul class="fl">';
+                            html += '            <li class="here"><span></span>到这里</li>';
+                            html += '            <li class="cancel" data-id="'+a.list[i].bespeakServId+'"><span></span>取消预约</li>';
+                            html += '        </ul>';
+                            html += '        <div class="fr green-btn" data-id="'+a.list[i].poleID+'" data-minutes="'+minutes+'">';
+                            html += '            <label>开始充电</label>';
+                            html += '            <span></span>';
+                            html += '        </div>';
+                            html += '    </div>';
+                            html += '</div>';
+                        }
+                        $(".order-main").html(html);
+                    }else{
+                        $(".order-cancel-main").show();
+                    }
+                }
+            }
+        }
+
+        // 获取当前预约
+        order();
+
+        // 读取我的充电
+        orderDoing();
+       
+        // 读取待支付订单
+        orderPaid();
+
+    })
+    </script>
+</body>
+</html>
+
+
+

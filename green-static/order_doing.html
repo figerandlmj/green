@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css?v=2015102710">
+    <link rel="stylesheet" type="text/css" href="css/index.css?v=2015102110">
+    <title>订单-充电中</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <ul class="mui-flex">
+                <li class=" cell"><a href="order.html">当前预约<span class="order01">0</span></a></li>
+                <li class="current cell"><a href="order_doing.html">充电中<span class="order02">0</span></a></li>
+                <li class="cell"><a href="order_paid.html">待支付<span class="order03">0</span></a></li>
+                <li class="last cell"><a href="order_cancel.html">已取消<span class="order04">0</span></a></li>
+            </ul>
+        </div>
+        <div class="order-doing-main">
+            <div class="con">
+                <!-- 有充电信息-->
+                <div class="img">
+                    <!-- <p class="p01">258<label>km</label></p> -->
+                    <!-- <p class="p02">71%</p> -->
+                    <p class="p01"><label id="soc">0</label>%</p>
+                </div>
+                <!-- 无充电信息-->
+                <!--<div class="img img02"></div>-->
+                <!-- 无充电-->
+                <!--<div class="img img03"></div>-->
+                <div class="time">
+                    <span></span>
+                    <label class="lab01">已充电时间</label>
+                    <label class="lab02"><label id="hour">0</label><em>h</em><label id="minute">0</label><em>min</em></label>
+                </div>
+                <div class="tip"><span>充电速度</span></div>
+                <div class="msg">
+                    <label><em>0</em>&nbsp;km/hr</label>
+                    <label class="center"><em id="vol">0</em>&nbsp;V</label>
+                    <span>3</span>
+                    <label><em id="cur">0</em><em class="em02">/32</em>&nbsp;A</label>
+                </div>
+            </div>
+            <div class="message">
+                <span>电量<label><em id="kwh">0.0</em>kWh</label></span>
+                <span class="span02">消费<label><em id="money">0.0</em>￥</label></span>
+            </div>
+            <div class="btn">
+                <a href="limit_value.html">
+                    <div class="fl">
+                        <span></span>
+                        <label>设置限值</label>
+                    </div>
+                </a>
+                <div class="fr stop-btn">
+                    <span></span>
+                    <label>结束充电</label>
+                </div>
+            </div>
+        </div>
+        <div class="order-cancel-main">
+            <p class="img"></p>
+            <p class="txt">亲，您当前还没有充电哦</p>
+        </div>
+        <div class="footer">
+            <ul class="mui-flex">
+                <li class="li01 cell"><a href="index.html"><span></span></a></li>
+                <li class="li02-current current cell to-order"><a><span></span></a></li>
+                <li class="li03 cell to-appointment"><a><span></span></a></li>
+                <li class="li04 cell" onclick="inputScan();" id="btn"><a href="javascript:void(0);"><span></span></a></li>
+                <li class="li05 cell"><a href="common_function.html"><span></span></a></li>
+            </ul>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/barcodescanner.js"></script>
+    <script type="text/javascript">
+        $(function(){
+
+            // 读取充电实时信息
+            function orderDoingMeg(){
+                var id=getLocalStorage("poleId");
+                var data={
+                    id: id
+                }
+                var url="PoleWebService/getRealByPoleId";
+                ajaxGetRequest(url, data, callback);
+                function callback(result) {
+                    var a=processData(result);
+                    if(a.success){
+                        $("#soc").text(a.poleReal.soc);
+                        $("#hour").text(a.poleReal.hour);
+                        $("#minute").text(a.poleReal.minute);
+                        $("#vol").text(Math.round(parseFloat(a.poleReal.vol)));
+                        $("#cur").text(Math.round(parseFloat(a.poleReal.cur)));
+                        $("#kwh").text(a.poleReal.kwh);
+                        $("#money").text(a.poleReal.money);
+                        $(".order-doing-main").show();
+                    }
+                }
+                setInterval("orderDoingMeg()", 1000);
+            }
+
+            // 读取我的充电
+            currentOrderDoing();
+            function currentOrderDoing(){
+                var identity=1;
+                var cardNo=getLocalStorage("cardno");
+                var pass=getLocalStorage("pass");
+                var data={
+                    identity: identity,
+                    cardNo: cardNo,
+                    pass: pass
+                }
+                var url="IcCardWebService/getStartChargingPole";
+                ajaxGetRequest(url, data, callback);
+                function callback(result) {
+                    var a=processData(result);
+                    // tipInformation(a.message,function(){});
+                    if(a.success){
+                        if(a.list.length<10){
+                            $(".order02").text(a.list.length);
+                        }else{
+                            $(".order02").addClass(".points");
+                            $(".order02").text("...");
+                        }
+                        if(a.list.length>0){
+                            setLocalStorage("poleId",a.list);
+                            orderDoingMeg();
+                        }else{
+                            $(".order-doing-main").empty();
+                            $(".order-cancel-main").show();
+                        }
+                    }
+                }
+            }
+
+            // 获取当前预约
+            order();
+
+            // 读取待支付订单
+            orderPaid();
+            
+            // 读取已取消订单
+            orderCancel();
+
+            // 停止充电2
+            function stopCharge(){
+                var identity=1;
+                var cardNo=getLocalStorage("cardno");
+                var pass=getLocalStorage("pass");
+                var data={
+                    identity: identity,
+                    cardNo: cardNo,
+                    pass: pass
+                }
+                var url="IcCardWebService/getPushInfo";
+                ajaxGetRequest(url, data, callback);
+                function callback(result) {
+                    var a=processData(result);
+                    if(a.list.length>0){
+                        for(var i=0;i<a.list.length;i++){
+                            if(a.list[i].requestResult){
+                                location.href="order_paid.html";
+                            }
+                        }
+                    }
+                }
+                setInterval("stopCharge()", 500);
+            }
+            
+            // 停止充电
+            $(".stop-btn").on("click",function(){
+                var identity=1;
+                var cardNo=getLocalStorage("cardno");
+                var pass=getLocalStorage("pass");
+                var poleId=getLocalStorage("poleId");
+                var cardId=getLocalStorage("cardid");
+                var data={
+                    identity: identity,
+                    cardNo: cardNo,
+                    pass: pass,
+                    poleId: poleId,
+                    cardId: cardId
+                }
+                var url="IcCardWebService/stopCharging";
+                ajaxGetRequest(url, data, callback);
+                function callback(result) {
+                    var a=processData(result);
+                    tipInformation(a.message,function(){});
+                    if(a.success){
+                        stopCharge();
+                    }
+                }
+            })
+
+        });
+    </script>
+</body>
+</html>
+
+
+

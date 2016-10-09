@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/appoint.css?v=2015102833">
+    <title>我的私有桩</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="common_function.html"><span class="fl"></span></a>
+            <span>我的私有桩</span>
+            <a href="piles_add.html"><span class="fr fr-add02"></span></a>
+        </div>
+        <div class="piles-main">
+            <div class="list">
+                <div class="img"><img src="img/piles_img.png" width="101px" height="99px"/></div>
+                <div class="con">
+                    <p class="p01">家用充电桩</p>
+                    <p class="p02">南京市江宁区保利中央公园10#负2层6668</p>
+                    <a href="piles_control.html">
+                        <p class="p03"><label>监控</label><span></span></p>
+                    </a>
+                </div>
+            </div>
+            <div class="list">
+                <div class="img"><img src="img/piles_img.png" width="101px" height="99px"/></div>
+                <div class="con">
+                    <p class="p01">家用充电桩</p>
+                    <p class="p02">南京市江宁区保利中央公园10#负2层6668</p>
+                    <a href="piles_control.html">
+                        <p class="p03"><label>监控</label><span></span></p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript">
+    $(function(){
+
+        // 我的私有桩
+        var identity=1;
+        var cardNo=getLocalStorage("cardno");
+        var pass=getLocalStorage("pass");
+        var data={
+            identity: identity,
+            cardNo: cardNo,
+            pass: pass
+        }
+        var url="IcCardWebService/getMyPole";
+        ajaxGetRequest(url, data, callback);
+        function callback(result) {
+            var a=processData(result);
+            tipInformation(a.message,function(){});
+            if(a.success){
+                var html = "";
+                for(var i=0; i<a.list.length; i++){
+                    html += '<div class="list">';
+                    html += '    <div class="img"><img src="img/piles_img.png" width="101px" height="99px"/></div>';
+                    html += '    <div class="con">';
+                    html += '        <a href="pile_message.html">';
+                    html += '            <p class="p01">家用充电桩</p>';
+                    html += '            <p class="p02">南京市江宁区保利中央公园10#负2层6668</p>';
+                    html += '        </a>';
+                    html += '        <a href="piles_control.html">';
+                    html += '            <p class="p03"><label>监控</label><span></span></p>';
+                    html += '        </a>';
+                    html += '    </div>';
+                    html += '</div>';
+                }
+                $(".piles-main").html(html);
+            }
+        }
+
+    })
+    </script>  
+</body>
+</html>

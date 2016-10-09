@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/login.css?v=2015102833">
+    <title>关于我们</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="personal.html"><span class="fl"></span></a>
+            <span>关于我们</span>
+        </div>
+        <div class="personal-main about-main">
+            <a href="appointment.html">
+                <div class="top">
+                    <p class="img"><img src="img/charge_btn.png" width="98px" height="98px"/></p>
+                    <p class="msg">绿色出行 V<label class="edition">1.0</label></p>
+                </div>
+            </a>
+            <div class="my check-update">
+                <span class="span01"></span>
+                <span class="span02">检查更新</span>
+                <span class="span03"></span>
+            </div>
+            <div class="my recommend">
+                <span class="span01"></span>
+                <span class="span02">给小伙伴们推荐</span>
+                <span class="span03"></span>
+                <span class="tip">分享有礼</span>
+            </div>
+            <a href="opinion.html">
+                <div class="my opinion">
+                    <span class="span01"></span>
+                    <span class="span02">给小绿提意见</span>
+                    <span class="span03"></span>
+                    <span class="tip">帮小绿做的更好</span>
+                </div>
+            </a>
+            <div class="my evaluation">
+                <span class="span01"></span>
+                <span class="span02">给小绿好评</span>
+                <span class="span03"></span>
+                <span class="tip">打个赏吧</span>
+            </div>
+            <div class="my contact">
+                <span class="span01"></span>
+                <span class="span02">联系小绿</span>
+                <span class="tip">约吗?</span>
+            </div>
+            <div class="my past">
+                <span class="span01"></span>
+                <span class="span02">小绿前世</span>
+                <span class="span03"></span>
+                <span class="tip">听我娓娓道来</span>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript">
+        $(function(){
+
+            // 检查更新
+            $(".check-update").on("click",function(){
+                var url="RecordWebService/getApiCloudAPPVersion";
+                ajaxGetRequest(url, {}, callback);
+                function callback(result) {
+                    var a=processData(result);
+                    tipInformation(a.message,function(){});
+                    if(a.success){
+                        $(".edition").text(a.versionNo);
+                    }
+                }
+            })
+
+        })
+    </script>
+</body>
+</html>

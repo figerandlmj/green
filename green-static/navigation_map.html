@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css?v=2015102833">
+    <title>导航地图</title>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <span class="fl back"></span>
+        <span>导航地图</span>
+    </div>
+    <!-- 地图-->
+    <div id="allmap"></div>
+    <!-- end地图-->
+</div>
+
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=EF505c8299ab5f1c2a98caf47b8d5c07&callback"></script>
+<script type="text/javascript">
+    $(function(){
+
+        // 显示风火轮
+        circleMask();
+        //自适应屏幕宽高
+        $("#allmap").css({
+            "min-height":$(window).height()
+        })
+        $(window).resize(function(){
+            $("#allmap").css({
+                "min-height":$(window).height()
+            })
+        });
+        $(".container").css({
+            "padding-bottom":"0px"
+        })
+
+        // 百度地图API功能
+        var endlat=getLocalStorage("endlat");
+        var endlon=getLocalStorage("endlon");
+        var lat,lon;
+        var map = new BMap.Map("allmap");
+        var point = new BMap.Point();
+        // map.centerAndZoom(point,15);
+        var geoc = new BMap.Geocoder();   
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition(function(r){
+            if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                var mk = new BMap.Marker(r.point);
+                map.addOverlay(mk);
+                map.panTo(r.point);
+
+                lat=r.point.lat;
+                lon=r.point.lng;
+
+                // var map = new BMap.Map("allmap");
+                map.centerAndZoom(new BMap.Point(lon, lat), 15);
+
+                var myP1 = new BMap.Point(lon, lat);    //起点
+                var myP2 = new BMap.Point(endlon,endlat);    //终点
+                var myIcon = new BMap.Icon("http://developer.baidu.com/map/jsdemo/img/Mario.png", new BMap.Size(32, 70), {    //小车图片
+                    offset: new BMap.Size(0, -5),    //相当于CSS精灵
+                    imageOffset: new BMap.Size(0, 0)    //图片的偏移量。为了是图片底部中心对准坐标点。
+                });
+                var driving2 = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});    //驾车实例
+                driving2.search(myP1, myP2);    //显示一条公交线路
+
+                window.run = function (){
+                    var driving = new BMap.DrivingRoute(map);    //驾车实例
+                    driving.search(myP1, myP2);
+                    driving.setSearchCompleteCallback(function(){
+                        var pts = driving.getResults().getPlan(0).getRoute(0).getPath();    //通过驾车实例，获得一系列点的数组
+                        var paths = pts.length;    //获得有几个点
+
+                        var carMk = new BMap.Marker(pts[0],{icon:myIcon});
+                        map.addOverlay(carMk);
+                        i=0;
+                        function resetMkPoint(i){
+                            carMk.setPosition(pts[i]);
+                            if(i < paths){
+                                setTimeout(function(){
+                                    i++;
+                                    resetMkPoint(i);
+                                },100);
+                            }
+                        }
+                        setTimeout(function(){
+                            resetMkPoint(5);
+                        },100)
+                    });
+                }
+            }else {
+                tipInformation('failed'+this.getStatus(),function(){});
+            }   
+        },{enableHighAccuracy: true})
+
+        setTimeout(function(){
+            run();
+        },1500);
+
+        // 关闭风火轮
+        $("#circle_mask").hide();
+        $("#circle_img").hide();
+
+        // 返回按钮
+        $(".back").on("click",function(){
+            var navigation_map_return=getLocalStorage("navigation_map_return");
+            if(navigation_map_return==0){
+                location.href="index.html";
+            }else if(navigation_map_return==1){
+                location.href="near_list.html";
+            }else if(navigation_map_return==2){
+                location.href="appointment.html";
+            }else if(navigation_map_return==3){
+                location.href="collection.html";
+            }else if(navigation_map_return==4){
+                location.href="order.html";
+            }else if(navigation_map_return==5){
+                location.href="near_detail.html";
+            }
+            
+        })
+
+    })
+</script>
+</body>
+</html>
+
+
+

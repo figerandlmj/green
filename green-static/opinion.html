@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/login.css?v=2015102833">
+    <title>建议优化</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="about.html"><span class="fl"></span></a>
+            <span>建议优化</span>
+        </div>
+        <div class="register-main login-main opinion-main">
+            <div class="input-main">
+                <textarea placeholder="感谢您提出宝贵意见，小绿将积极采纳，提高服务质量，谢谢！" class="message"></textarea>
+            </div>
+            <div class="word">（建议100字以内）</div>
+            <div class="clearfix"></div>
+            <div class="submit-btn">
+                <input type="submit" value="提交" class="submit-btn"/>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript">
+    $(function(){
+
+        // 提交意见
+        $(".submit-btn").on("click", function(){
+            var identity=1;
+            var cardNo=getLocalStorage("cardno");
+            var pass=getLocalStorage("pass");
+            var message=$(".message").val();
+            var tel=getLocalStorage("mobilePhone");
+            var data={
+                identity: identity,
+                cardNo: cardNo,
+                pass: pass,
+                message:message,
+                tel:tel
+            }
+            var url="IcCardWebService/advise";
+            if(message==""){
+                tipInformation("请输入意见内容！",function(){});
+                return false;
+            }
+            ajaxGetRequest(url, data, callback);
+            function callback(result) {
+                var a=processData(result);
+                tipInformation(a.message,function(){});
+            }
+        });
+
+    })
+    </script>
+</body>
+</html>

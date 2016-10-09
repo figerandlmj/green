@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/login.css?v=2015101310">
+    <title>个人信息</title>
+</head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <a href="personal.html"><span class="fl"></span></a>
+                <span>个人信息</span>
+            </div>
+            <div class="personal-main register-main information-main">
+                <form action="" method="post" enctype="multipart/form-data" id="myForm">
+                    <div class="member">
+                        <span class="msg">个人头像<br/><label>请上传真实个人证件照</label></span>
+                        <span class="arrow"></span>
+                        <span class="img">
+                            <img src="img/avatar.png" width="50px" height="50px" id="ImgPh"/>
+                            <input  type="file" name="avatar" id="inputstyle"/>
+                        </span>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="my">
+                        <span class="span02">我的姓名</span>
+                        <span class="span03"></span>
+                        <input class="tip" name="name" type="text" value="" id="name">
+                    </div>
+                    <div class="my remove-top">
+                        <span class="span02">我的昵称</span>
+                        <span class="span03"></span>
+                        <input class="tip" type="text" value="">
+                    </div>
+                    <div class="my remove-top">
+                        <span class="span02">手机号</span>
+                        <span class="span03"></span>
+                        <input class="tip" name="telphone" type="text" value="" id="mobilePhone">
+                    </div>
+                    <div class="my remove-top">
+                        <span class="span02">身份证号</span>
+                        <span class="span03"></span>
+                        <input class="tip" name="idcard" type="text" value="" id="idcard">
+                    </div>
+                    <div class="my remove-top">
+                        <span class="span02">电子邮箱</span>
+                        <span class="span03"></span>
+                        <input class="tip" name="email" type="text" value="" id="email">
+                    </div>
+                    <div class="my remove-top">
+                        <span class="span02">工作单位</span>
+                        <span class="span03"></span>
+                        <span class="tip-btn">未提交</span>
+                    </div>
+                    <div class="my remove-top">
+                        <span class="span02">家庭住址</span>
+                        <span class="span03"></span>
+                        <span class="tip-btn">未提交</span>
+                    </div>
+                    <div class="my remove-top">
+                        <span class="span02">紧急联系方式</span>
+                        <span class="span03"></span>
+                        <span class="tip-btn">未提交</span>
+                    </div>
+                    <div class="submit-btn">
+                        <input type="button" value="提交" class="updata-btn"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/uploadPreview.min.js"></script>
+    <script type="text/javascript" src="js/uploadPreview.js"></script>
+    <script type="text/javascript" src="js/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script type="text/javascript" src="js/formValidatorRegex.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            // 上传头像
+            $("#inputstyle").uploadPreview({ Img: "ImgPh", Height:50, Width:50, ImgType: ["gif", "jpeg", "jpg", "bmp", "png"], Callback: function () { }});
+            // 个人信息
+            var identity=1;
+            var cardNo=getLocalStorage("cardno");
+            var pass=getLocalStorage("pass");
+            var data={
+                identity: identity,
+                cardNo: cardNo,
+                pass: pass
+            }
+            var url="IcCardWebService/getCardInfo";
+            ajaxGetRequest(url, data, callback);
+            function callback(result) {
+                var a=processData(result);
+                if(a.success){
+                    $("#name").val(a.cardinfo.name);
+                    $("#idcard").val(a.cardinfo.idcard);
+                    $("#mobilePhone").val(a.cardinfo.mobilePhone);
+                    $("#email").val(a.cardinfo.email);
+                }
+            }
+            // 修改个人信息
+            $(".updata-btn").on("click",function(){
+                var url="http://180.96.17.120:8000/webservice/services/IcCardWebService/updateUser?response=application/json";
+                $("#myForm").attr("action", url);
+                
+                var cardNo=getLocalStorage("cardno");
+                var pass=getLocalStorage("pass");
+                var car=getLocalStorage("car");
+                // var avatar_attr = $("#inputstyle").val();     /*头像*/
+                var mobilePhone = $("#mobilePhone").val();/*手机号*/
+                var email = $("#email").val();/*邮箱*/
+                
+                var regPhone = /^1[34578]\d{9}$/ ;//手机号正则
+                var regEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+
+                if(mobilePhone !="" && !regPhone.test(mobilePhone)){
+                    tipInformation("无效手机号!",function(){});
+                    return false;
+                }else if(email !="" && !regEmail.test(email)){
+                    tipInformation("无效邮箱!",function(){});
+                    return false;
+                }
+                var data = {
+                    cardNo:cardNo,
+                    pass:pass,
+                    // avatar_attr: avatar_attr,
+                    telphone: mobilePhone,
+                    email: email,
+                    car:car
+                };
+
+                var options = {  
+                   // target: '#output',          //把服务器返回的内容放入id为output的元素中      
+                   // beforeSubmit: showRequest,  //提交前的回调函数  
+                   // url: url,                   //默认是form的action， 如果申明，则会覆盖  
+                   // type: "post",               //默认是form的method（get or post），如果申明，则会覆盖  
+                   data:data,
+                   dataType: "json",           //html(默认), xml, script, json...接受服务端返回的类型  
+                   // crossDomain: true,
+                   success: callback     //提交后的回调函数  
+                   // clearForm: true,          //成功提交后，清除所有表单元素的值  
+                   // resetForm: true,          //成功提交后，重置所有表单元素的值  
+                   // timeout: 3000               //限制请求的时间，当请求大于3秒后，跳出请求  
+                }
+
+                $("#myForm").ajaxSubmit(options);
+                function callback(result) {
+                    var a=processData(result);
+                    tipInformation(a.message,function(){});
+                    if(a.success){
+                        location.href=window.location.href;
+                    }
+                } 
+            });
+
+        });
+    </script>
+    </body>
+</html>

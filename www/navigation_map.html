@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css?v=2015102833">
+    <title>导航地图</title>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <a href="near_list.html"><span class="fl"></span></a>
+        <span>导航地图</span>
+    </div>
+    <!-- 地图-->
+    <div id="allmap"></div>
+    <!-- end地图-->
+    <div class="filter"><img src="img/filter.png"/></div>
+    <div class="filter-type">
+        <div class="title"><label>类型</label><span class="close-type"></span></div>
+        <ul>
+            <li><span class="sel-btn selected"></span>快充</li>
+            <li><span class="sel-btn unselected"></span>慢充</li>
+            <li><span class="sel-btn selected"></span>高速</li>
+            <li class="li04">只看可用<span class="see btn"></span></li>
+        </ul>
+    </div>
+    <!-- 充电站信息框-->
+    <div class="map-box01">
+        <div class="title">
+            <label>安德门充电站</label>
+            <span class="heart"></span>
+            <span class="tel"></span>
+        </div>
+        <div class="clearfix"></div>
+        <div class="content">
+            <div class="fl left">
+                <p class="p01">
+                    <label>服&nbsp;&nbsp;&nbsp;&nbsp;务</label>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </p>
+                <p class="p02"><span></span>安德门大街15号<label>3.2km</label></p>
+            </div>
+            <div class="fr right"></div>
+        </div>
+        <div class="bottom-href">
+            <div class="fl">
+                <span class="span01"></span>
+                <label>导 航</label>
+            </div>
+            <div class="fl">
+                <span class="span02"></span>
+                <label>预约充电</label>
+            </div>
+        </div>
+        <div class="triangle"></div>
+    </div>
+    <!-- end充电站信息框-->
+    <!-- 所在位置信息框-->
+    <div class="map-box02">
+        <div class="title">
+            <span class="span01">我在<label>水阁路15号</label>附近充电</span>
+            <span class="span02"></span>
+        </div>
+        <div class="triangle"></div>
+    </div>
+    <!-- end所在位置信息框-->
+</div>
+
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=EF505c8299ab5f1c2a98caf47b8d5c07&callback"></script>
+<script type="text/javascript">
+    $(function(){
+        //自适应屏幕宽高
+        $("#allmap").css({
+            "min-height":$(window).height()
+        })
+        $(window).resize(function(){
+            $("#allmap").css({
+                "min-height":$(window).height()
+            })
+        });
+        $(".container").css({
+            "padding-bottom":"0px"
+        })
+
+        // 百度地图API功能
+        var map = new BMap.Map("allmap");
+        map.centerAndZoom(new BMap.Point(116.404, 39.915), 15);
+
+        var myP1 = new BMap.Point(116.380967,39.913285);    //起点
+        var myP2 = new BMap.Point(116.424374,39.914668);    //终点
+        var myIcon = new BMap.Icon("http://developer.baidu.com/map/jsdemo/img/Mario.png", new BMap.Size(32, 70), {    //小车图片
+            //offset: new BMap.Size(0, -5),    //相当于CSS精灵
+            imageOffset: new BMap.Size(0, 0)    //图片的偏移量。为了是图片底部中心对准坐标点。
+          });
+        var driving2 = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});    //驾车实例
+        driving2.search(myP1, myP2);    //显示一条公交线路
+
+        window.run = function (){
+            var driving = new BMap.DrivingRoute(map);    //驾车实例
+            driving.search(myP1, myP2);
+            driving.setSearchCompleteCallback(function(){
+                var pts = driving.getResults().getPlan(0).getRoute(0).getPath();    //通过驾车实例，获得一系列点的数组
+                var paths = pts.length;    //获得有几个点
+
+                var carMk = new BMap.Marker(pts[0],{icon:myIcon});
+                map.addOverlay(carMk);
+                i=0;
+                function resetMkPoint(i){
+                    carMk.setPosition(pts[i]);
+                    if(i < paths){
+                        setTimeout(function(){
+                            i++;
+                            resetMkPoint(i);
+                        },100);
+                    }
+                }
+                setTimeout(function(){
+                    resetMkPoint(5);
+                },100)
+
+            });
+        }
+        setTimeout(function(){
+            run();
+        },1500);
+
+    })
+</script>
+</body>
+</html>
+
+
+

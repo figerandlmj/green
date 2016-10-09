@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/appoint.css?v=201511433">
+    <title>城市选择</title>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <a href="request.html"><span class="fl"></span></a>
+        <span>城市选择</span>
+    </div>
+    <div class="city-main">
+        <p class="current">
+            <span></span>
+            <label>南京&nbsp;(当前城市）</label>
+        </p>
+        <div class="list">
+            <p class=" title hot-title" id="hot">热门</p>
+            <a href="place.html"><p class="city">北京</p></a>
+            <p class="city">上海</p>
+            <p class="city">广州</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="a">A</p>
+            <p class="city">阿坝藏族羌族自治州</p>
+            <p class="city">阿克苏地区</p>
+            <p class="city">阿拉尔市</p>
+            <p class="city">阿拉善盟</p>
+            <p class="city">阿勒泰地区</p>
+            <p class="city">阿里地区</p>
+            <p class="city">安康市</p>
+            <p class="city">安庆市</p>
+            <p class="city">安顺市</p>
+            <p class="city">安阳市</p>
+            <p class="city">鞍山市</p>
+            <p class="city">澳门特别行政区</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="b">B</p>
+            <p class="city">巴彦淖尔市</p>
+            <p class="city">巴音郭楞蒙古自治州</p>
+            <p class="city">巴中市</p>
+            <p class="city">白城市</p>
+            <p class="city">白沙黎族自治县</p>
+            <p class="city">白山市</p>
+            <p class="city">白银市</p>
+            <p class="city">百色市</p>
+            <p class="city">蚌埠市</p>
+            <p class="city">包头市</p>
+            <p class="city">宝鸡市</p>
+            <p class="city">保定市</p>
+            <p class="city">保山市</p>
+            <p class="city">保亭黎族苗族自治县</p>
+            <p class="city">北海市</p>
+            <p class="city">北京市</p>
+            <p class="city">本溪市</p>
+            <p class="city">毕节地区</p>
+            <p class="city">滨州市</p>
+            <p class="city">亳州市</p>
+            <p class="city">博尔塔拉蒙古自治州</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="c">C</p>
+            <p class="city">沧州市</p>
+            <p class="city">昌都地区</p>
+            <p class="city">昌吉回族自治州</p>
+            <p class="city">昌江黎族自治县</p>
+            <p class="city">长春市</p>
+            <p class="city">长沙市</p>
+            <p class="city">长治市</p>
+            <p class="city">常德市</p>
+            <p class="city">常州市</p>
+            <p class="city">巢湖市</p>
+            <p class="city">朝阳市</p>
+            <p class="city">潮州市</p>
+            <p class="city">郴州市</p>
+            <p class="city">成都市</p>
+            <p class="city">承德市</p>
+            <p class="city">澄迈县</p>
+            <p class="city">池州市</p>
+            <p class="city">赤峰市</p>
+            <p class="city">崇左市</p>
+            <p class="city">滁州市</p>
+            <p class="city">楚雄彝族自治州</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="d">D</p>
+            <p class="city">达州市</p>
+            <p class="city">大理白族自治州</p>
+            <p class="city">大连市</p>
+            <p class="city">大庆市</p>
+            <p class="city">大同市</p>
+            <p class="city">大兴安岭地区</p>
+            <p class="city">丹东市</p>
+            <p class="city">儋州市</p>
+            <p class="city">德宏傣族景颇族自治州</p>
+            <p class="city">德阳市</p>
+            <p class="city">德州市</p>
+            <p class="city">迪庆藏族自治州</p>
+            <p class="city">定安县</p>
+            <p class="city">定西市</p>
+            <p class="city">东方市</p>
+            <p class="city">东莞市</p>
+            <p class="city">东营市</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="e">E</p>
+            <p class="city">鄂尔多斯市</p>
+            <p class="city">鄂州市</p>
+            <p class="city">恩施土家族苗族自治州</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="f">F</p>
+            <p class="city">防城港市</p>
+            <p class="city">佛山市</p>
+            <p class="city">福州市</p>
+            <p class="city">抚顺市</p>
+            <p class="city">抚州市</p>
+            <p class="city">阜新市</p>
+            <p class="city">阜阳市</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="g">G</p>
+            <p class="city">甘南藏族自治州</p>
+            <p class="city">甘孜藏族自治州</p>
+            <p class="city">赣州市</p>
+            <p class="city">高雄市</p>
+            <p class="city">固原市</p>
+            <p class="city">广安市</p>
+            <p class="city">广元市</p>
+            <p class="city">广州市</p>
+            <p class="city">贵港市</p>
+            <p class="city">贵阳市</p>
+            <p class="city">桂林市</p>
+            <p class="city">果洛藏族自治州</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="h">H</p>
+            <p class="city">哈尔滨市</p>
+            <p class="city">哈密地区</p>
+            <p class="city">海北藏族自治州</p>
+            <p class="city">海东地区</p>
+            <p class="city">海口市</p>
+            <p class="city">海南藏族自治州</p>
+            <p class="city">海西蒙古族藏族自治州</p>
+            <p class="city">邯郸市</p>
+            <p class="city">汉中市</p>
+            <p class="city">杭州市</p>
+            <p class="city">合肥市</p>
+            <p class="city">和田地区</p>
+            <p class="city">河池市</p>
+            <p class="city">河源市</p>
+            <p class="city">菏泽市</p>
+            <p class="city">贺州市</p>
+            <p class="city">鹤壁市</p>
+            <p class="city">鹤岗市</p>
+            <p class="city">黑河市</p>
+            <p class="city">衡水市</p>
+            <p class="city">衡阳市</p>
+            <p class="city">红河哈尼族彝族自治州</p>
+            <p class="city">呼和浩特市</p>
+            <p class="city">呼伦贝尔市</p>
+            <p class="city">湖州市</p>
+            <p class="city">葫芦岛市</p>
+            <p class="city">花莲县</p>
+            <p class="city">怀化市</p>
+            <p class="city">淮安市</p>
+            <p class="city">淮北市</p>
+            <p class="city">淮南市</p>
+            <p class="city">黄冈市</p>
+            <p class="city">黄南藏族自治州</p>
+            <p class="city">黄山市</p>
+            <p class="city">黄石市</p>
+            <p class="city">惠州市</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="j">J</p>
+            <p class="city">鸡西市</p>
+            <p class="city">基隆市</p>
+            <p class="city">吉安市</p>
+            <p class="city">吉林市</p>
+            <p class="city">济南市</p>
+            <p class="city">济宁市</p>
+            <p class="city">济源市</p>
+            <p class="city">佳木斯市</p>
+            <p class="city">嘉兴市</p>
+            <p class="city">嘉义县</p>
+            <p class="city">嘉义县</p>
+            <p class="city">嘉峪关市</p>
+            <p class="city">江门市</p>
+            <p class="city">焦作市</p>
+            <p class="city">揭阳市</p>
+            <p class="city">金昌市</p>
+            <p class="city">金华市</p>
+            <p class="city">金门县</p>
+            <p class="city">锦州市</p>
+            <p class="city">晋城市</p>
+            <p class="city">晋中市</p>
+            <p class="city">荆门市</p>
+            <p class="city">荆州市</p>
+            <p class="city">景德镇市</p>
+            <p class="city">九江市</p>
+            <p class="city">九龙</p>
+            <p class="city">酒泉市</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="k">K</p>
+            <p class="city">喀什地区</p>
+            <p class="city">开封市</p>
+            <p class="city">克拉玛依市</p>
+            <p class="city">克孜勒苏柯尔克孜自治州</p>
+            <p class="city">昆明市</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="l">L</p>
+            <p class="city">拉萨市</p>
+            <p class="city">来宾市</p>
+            <p class="city">莱芜市</p>
+            <p class="city">兰州市</p>
+            <p class="city">廊坊市</p>
+            <p class="city">乐东黎族自治县</p>
+            <p class="city">乐山市</p>
+            <p class="city">丽江市</p>
+            <p class="city">丽水市</p>
+            <p class="city">连江县</p>
+            <p class="city">连云港市</p>
+            <p class="city">凉山彝族自治州</p>
+            <p class="city">辽阳市</p>
+            <p class="city">辽源市</p>
+            <p class="city">聊城市</p>
+            <p class="city">林芝地区</p>
+            <p class="city">临沧市</p>
+            <p class="city">临汾市</p>
+            <p class="city">临高县</p>
+            <p class="city">临夏回族自治州</p>
+            <p class="city">临沂市</p>
+            <p class="city">陵水黎族自治县</p>
+            <p class="city">柳州市</p>
+            <p class="city">六安市</p>
+            <p class="city">六盘水市</p>
+            <p class="city">龙岩市</p>
+            <p class="city">陇南市</p>
+            <p class="city">娄底市</p>
+            <p class="city">泸州市</p>
+            <p class="city">吕梁市</p>
+            <p class="city">洛阳市</p>
+            <p class="city">漯河市</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="m">M</p>
+            <p class="city">马鞍山市</p>
+            <p class="city">茂名市</p>
+            <p class="city">眉山市</p>
+            <p class="city">梅州市</p>
+            <p class="city">绵阳市</p>
+            <p class="city">苗栗县</p>
+            <p class="city">牡丹江市</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="n">N</p>
+            <p class="city">内江市</p>
+            <p class="city">那曲地区</p>
+            <p class="city">南昌市</p>
+            <p class="city">南充市</p>
+            <p class="city">南京市</p>
+            <p class="city">南宁市</p>
+            <p class="city">南平市</p>
+            <p class="city">南通市</p>
+            <p class="city">南投县</p>
+            <p class="city">南阳市</p>
+            <p class="city">宁波市</p>
+            <p class="city">宁德市</p>
+            <p class="city">怒江傈傈族自治州</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="p">P</p>
+            <p class="city">攀枝花市</p>
+            <p class="city">盘锦市</p>
+            <p class="city">澎湖县</p>
+            <p class="city">平顶山市</p>
+            <p class="city">平凉市</p>
+            <p class="city">屏东县</p>
+            <p class="city">萍乡市</p>
+            <p class="city">莆田市</p>
+            <p class="city">濮阳市</p>
+            <p class="city">普洱市</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="q">Q</p>
+            <p class="city">七台河市</p>
+            <p class="city">齐齐哈尔市</p>
+            <p class="city">潜江市</p>
+            <p class="city">黔东南苗族侗族自治州</p>
+            <p class="city">黔南布依族苗族自治州</p>
+            <p class="city">黔西南布依族苗族自治州</p>
+            <p class="city">钦州市</p>
+            <p class="city">秦皇岛市</p>
+            <p class="city">青岛市</p>
+            <p class="city">清远市</p>
+            <p class="city">庆阳市</p>
+            <p class="city">琼海市</p>
+            <p class="city">琼中黎族苗族自治县</p>
+            <p class="city">曲靖市</p>
+            <p class="city">衢州市</p>
+            <p class="city">泉州市</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="r">R</p>
+            <p class="city">日喀则地区</p>
+            <p class="city">日照市</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="s">S</p>
+            <p class="city">三门峡市</p>
+            <p class="city">三明市</p>
+            <p class="city">三亚市</p>
+            <p class="city">山南地区</p>
+            <p class="city">汕头市</p>
+            <p class="city">汕尾市</p>
+            <p class="city">商洛市</p>
+            <p class="city">商丘市</p>
+            <p class="city">上海市</p>
+            <p class="city">上饶市</p>
+            <p class="city">韶关市</p>
+            <p class="city">邵阳市</p>
+            <p class="city">绍兴市</p>
+            <p class="city">深圳市</p>
+            <p class="city">神农架林区</p>
+            <p class="city">沈阳市</p>
+            <p class="city">十堰市</p>
+            <p class="city">石河子市</p>
+            <p class="city">石家庄市</p>
+            <p class="city">石嘴山市</p>
+            <p class="city">双鸭山市</p>
+            <p class="city">朔州市</p>
+            <p class="city">四平市</p>
+            <p class="city">松原市</p>
+            <p class="city">苏州市</p>
+            <p class="city">宿迁市</p>
+            <p class="city">宿州市</p>
+            <p class="city">绥化市</p>
+            <p class="city">随州市</p>
+            <p class="city">遂宁市</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="t">T</p>
+            <p class="city">塔城地区</p>
+            <p class="city">台北市</p>
+            <p class="city">台东县</p>
+            <p class="city">台南市</p>
+            <p class="city">台中市</p>
+            <p class="city">台州市</p>
+            <p class="city">太原市</p>
+            <p class="city">泰安市</p>
+            <p class="city">泰州市</p>
+            <p class="city">唐山市</p>
+            <p class="city">桃园县</p>
+            <p class="city">天津市</p>
+            <p class="city">天门市</p>
+            <p class="city">天水市</p>
+            <p class="city">铁岭市</p>
+            <p class="city">通化市</p>
+            <p class="city">通辽市</p>
+            <p class="city">铜川市</p>
+            <p class="city">铜陵市</p>
+            <p class="city">铜仁地区</p>
+            <p class="city">图木舒克市</p>
+            <p class="city">吐鲁番地区</p>
+            <p class="city">屯昌县</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="w">W</p>
+            <p class="city">万宁市</p>
+            <p class="city">威海市</p>
+            <p class="city">潍坊市</p>
+            <p class="city">渭南市</p>
+            <p class="city">温州市</p>
+            <p class="city">文昌市</p>
+            <p class="city">文山壮族苗族自治州</p>
+            <p class="city">乌海市</p>
+            <p class="city">乌兰察布市</p>
+            <p class="city">乌鲁木齐市</p>
+            <p class="city">无锡市</p>
+            <p class="city">吴忠市</p>
+            <p class="city">芜湖市</p>
+            <p class="city">梧州市</p>
+            <p class="city">五家渠市</p>
+            <p class="city">五指山市</p>
+            <p class="city">武汉市</p>
+            <p class="city">武威市</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="x">X</p>
+            <p class="city">西安市</p>
+            <p class="city">西宁市</p>
+            <p class="city">西双版纳傣族自治州</p>
+            <p class="city">锡林郭勒盟</p>
+            <p class="city">厦门市</p>
+            <p class="city">仙桃市</p>
+            <p class="city">咸宁市</p>
+            <p class="city">咸阳市</p>
+            <p class="city">香港岛</p>
+            <p class="city">湘潭市</p>
+            <p class="city">湘西土家族苗族自治州</p>
+            <p class="city">襄樊市</p>
+            <p class="city">孝感市</p>
+            <p class="city">忻州市</p>
+            <p class="city">新北市</p>
+            <p class="city">新界</p>
+            <p class="city">新乡市</p>
+            <p class="city">新余市</p>
+            <p class="city">新竹市</p>
+            <p class="city">新竹县</p>
+            <p class="city">信阳市</p>
+            <p class="city">兴安盟</p>
+            <p class="city">邢台市</p>
+            <p class="city">徐州市</p>
+            <p class="city">许昌市</p>
+            <p class="city">宣城市</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="y">Y</p>
+            <p class="city">雅安市</p>
+            <p class="city">烟台市</p>
+            <p class="city">延安市</p>
+            <p class="city">延边朝鲜族自治州</p>
+            <p class="city">盐城市</p>
+            <p class="city">扬州市</p>
+            <p class="city">阳江市</p>
+            <p class="city">阳泉市</p>
+            <p class="city">伊春市</p>
+            <p class="city">伊犁哈萨克自治州</p>
+            <p class="city">宜宾市</p>
+            <p class="city">宜昌市</p>
+            <p class="city">宜春市</p>
+            <p class="city">宜兰县</p>
+            <p class="city">益阳市</p>
+            <p class="city">银川市</p>
+            <p class="city">鹰潭市</p>
+            <p class="city">营口市</p>
+            <p class="city">永州市</p>
+            <p class="city">榆林市</p>
+            <p class="city">玉林市</p>
+            <p class="city">玉树藏族自治州</p>
+            <p class="city">玉溪市</p>
+            <p class="city">岳阳市</p>
+            <p class="city">云浮市</p>
+            <p class="city">云林县</p>
+            <p class="city">运城市</p>
+        </div>
+        <div class="list">
+            <p class=" title" id="z">Z</p>
+            <p class="city">枣庄市</p>
+            <p class="city">湛江市</p>
+            <p class="city">张家界市</p>
+            <p class="city">张家口市</p>
+            <p class="city">张掖市</p>
+            <p class="city">彰化县</p>
+            <p class="city">漳州市</p>
+            <p class="city">昭通市</p>
+            <p class="city">肇庆市</p>
+            <p class="city">镇江市</p>
+            <p class="city">郑州市</p>
+            <p class="city">中山市</p>
+            <p class="city">中卫市</p>
+            <p class="city">重庆市</p>
+            <p class="city">舟山市</p>
+            <p class="city">周口市</p>
+            <p class="city">株洲市</p>
+            <p class="city">珠海市</p>
+            <p class="city">驻马店市</p>
+            <p class="city">资阳市</p>
+            <p class="city">淄博市</p>
+            <p class="city">自贡市</p>
+            <p class="city">遵义市</p>
+        </div>
+
+        <div class="right">
+            <div style="position: fixed;">
+                <a href="#hot"><p class="hot">热门</p></a>
+                <a href="#a"><p>A</p></a>
+                <a href="#b"><p>B</p></a>
+                <a href="#c"><p>C</p></a>
+                <a href="#d"><p>D</p></a>
+                <a href="#e"><p>E</p></a>
+                <a href="#f"><p>F</p></a>
+                <a href="#g"><p>G</p></a>
+                <a href="#h"><p>H</p></a>
+                <a href="#j"><p>J</p></a>
+                <a href="#k"><p>K</p></a>
+                <a href="#l"><p>L</p></a>
+                <a href="#m"><p>M</p></a>
+                <a href="#n"><p>N</p></a>
+                <a href="#p"><p>P</p></a>
+                <a href="#q"><p>Q</p></a>
+                <a href="#r"><p>R</p></a>
+                <a href="#s"><p>S</p></a>
+                <a href="#t"><p>T</p></a>
+                <a href="#w"><p>W</p></a>
+                <a href="#x"><p>X</p></a>
+                <a href="#y"><p>Y</p></a>
+                <a href="#z"><p>Z</p></a>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript">
+    $(function(){
+        // 去除第一个border-top
+        $(".list").each(function(){
+            $(this).find(".city").eq(0).css({
+                "border-top":"none"
+            })
+        });
+    })
+</script>
+</body>
+</html>

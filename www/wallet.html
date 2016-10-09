@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/login.css?v=2015101310">
+    <title>我的钱包</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="personal.html"><span class="fl"></span></a>
+            <span>我的钱包</span>
+        </div>
+        <div class="personal-main wallet-main">
+            <div class="my">
+                <span class="span01"></span>
+                <span class="span02">我的余额</span>
+                <span class="money">0.00元</span>
+            </div>
+            <div class="my setting recharge">
+                <span class="span01"></span>
+                <span class="span02">我要充值</span>
+                <span class="span03"></span>
+            </div>
+            <div class="my about">
+                <span class="span01"></span>
+                <span class="span02">账单明细</span>
+                <span class="span03"></span>
+            </div>
+
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript">
+    $(function(){
+
+        // 我的余额
+        getMyBalance();
+        function getMyBalance(){
+            var identity=1;
+            var cardNo=getLocalStorage("cardno");
+            var pass=getLocalStorage("pass");
+            var data={
+                identity: identity,
+                cardNo: cardNo,
+                pass: pass
+            }
+            var url="IcCardWebService/getMyCard";
+            ajaxGetRequest(url, data, callback);
+            function callback(result) {
+                var a=processData(result);
+                tipInformation(a.message,function(){});
+                if(a.success){
+                    $(".money").text(a.list.haveMoney+"元");
+                }
+            }
+        }
+
+        // 点击充值
+        $(".recharge").on("click",function(){
+            setLocalStorage("recharge_return",1);
+            location.href="wallet_recharge.html";
+        })
+
+        // 账单明细
+        function billDetail(){
+            var identity=1;
+            var cardNo=getLocalStorage("cardno");
+            var pass=getLocalStorage("pass");
+            var cardId=getLocalStorage("cardid");
+            var pageSize=6;
+            var index=1;
+            var data={
+                identity: identity,
+                cardNo: cardNo,
+                pass: pass,
+                cardId: cardId,
+                pageSize: pageSize,
+                index: index
+            }
+            var url="IcCardWebService/getConsumRecord";
+            ajaxGetRequest(url, data, callback);
+            function callback(result) {
+                var a=processData(result);
+                tipInformation(a.message,function(){});
+            }
+        }
+
+    })
+    </script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/appoint.css?v=2015102922">
+    <title>请求救援</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="common_function.html"><span class="fl"></span></a>
+            <span>请求救援</span>
+        </div>
+        <div class="request-main">
+            <form action="request_success.html" method="post" enctype="multipart/form-data" onsubmit="return check()" class="form-submit">
+                <a href="tel:95598">
+                    <div class="tel">
+                        <div class="img"><span></span><br/>救援电话</div>
+                        <input type="text" name="" value="95598" readonly/>
+                        <!-- <span class="fr"></span> -->
+                    </div>
+                </a>
+                <p class="p01">
+                    <label>地点</label>
+                    <input type="text" name="" value="" class="adress" placeholder="请输入地址"/>
+                    <!-- <a href="city.html"><span></span></a> -->
+                </p>
+                <p class="p02">
+                    <label>描述</label>
+                    <input type="text" name="" value="" class="desc" placeholder="请输入描叙"/>
+                    <!-- <span></span> -->
+                </p>
+                <p class="p02">
+                    <label>手机</label>
+                    <input type="text" name="" value="" class="telephone" placeholder="请输入手机"/>
+                    <!-- <span></span> -->
+                </p>
+                <div class="btn">
+                    <div class="submit-btn">
+                        <label>请求救援</label>
+                        <span></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- 地图-->
+        <div id="allmap04" style="display:none;"></div>
+        <!-- end地图-->
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=EF505c8299ab5f1c2a98caf47b8d5c07&callback"></script>
+    <script type="text/javascript">
+    $(function(){
+
+        // 百度地图API功能
+        baiduMap("allmap04");
+        // 请求救援
+        $(".submit-btn").on("click", function(){
+            var identity=1;
+            var cardNo=getLocalStorage("cardno");
+            var pass=getLocalStorage("pass");
+            var accName=getLocalStorage("name");
+            var tel=$(".telephone").val();
+            var adress=$(".adress").val();
+            var desc=$(".desc").val();
+            var data={
+                identity: identity,
+                cardNo: cardNo,
+                pass: pass,
+                accName:accName,
+                lat:lat,
+                lon:lon,
+                adress:adress,
+                desc:desc,
+                tel:tel
+            }
+            var url="IcCardWebService/rescue";
+            if(adress=="" || desc=="" || tel==""){
+                tipInformation("请完善信息！",function(){});
+                return false;
+            }else if(!regPhone.test(tel)){
+                tipInformation("请输入正确的手机号！",function(){});
+                return false;
+            }
+            ajaxGetRequest(url, data, callback);
+            function callback(result) {
+                var a=processData(result);
+                tipInformation(a.message,function(){});
+            }
+        });
+
+    })
+    </script>
+</body>
+</html>

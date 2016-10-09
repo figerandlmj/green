@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css?v=2015102833">
+    <link rel="stylesheet" type="text/css" href="css/appoint.css?v=2015102833">
+    <title>我的私有桩-添加</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="piles.html"><span class="fl"></span></a>
+            <span>添加私有桩</span>
+        </div>
+        <div class="piles-add-main">
+            <form action="" method="post" enctype="multipart/form-data" id="myForm">
+                <div class="con">
+                    <p><label>私有桩名称<em>*</em></label><input type="text" name="" value="" class="poleName" placeholder="请输入私有桩名称"/></p>
+                    <p><label>电话<em>*</em></label><input type="text" name="" value="" class="tel" placeholder="请输入电话"/></p>
+                    <p><label>地址<em>*</em></label><input type="text" name="" value="" class="addr" placeholder="请输入地址"/></p>
+                    <!-- <p><label>数量<em>*</em></label><input type="text" name="" value="" class="" placeholder="请输入数量"/></p> -->
+                    <p><label>电子邮箱</label><input type="text" name="" value="" class="" placeholder="请输入电子邮箱"/></p>
+                    <p><label>私有桩类型</label><input type="text" name="" value="" class="type" placeholder="请输入私有桩类型"/></p>
+                    <p><label>私有桩型号</label><input type="text" name="" value="" class="model" placeholder="请输入私有桩型号"/></p>
+                    <div class="add-img">
+                        <label>图片<em>*</em></label><br/><br/>
+                        <div class="img01">
+                            <input type="file" name="pic1" value="" id="inputstyle01"/>
+                            <span class="span01"></span>
+                            <img src="" width="50px" height="50px" id="ImgPh01"/>
+                        </div>
+                        <div class="img02">
+                            <input type="file" name="pic2" value="" id="inputstyle02"/>
+                            <span class="span02"></span>
+                            <img src="" width="50px" height="50px" id="ImgPh02"/>
+                        </div>
+                        <div class="img03">
+                            <input type="file" name="pic3" value="" id="inputstyle03"/>
+                            <span class="span03"></span>
+                            <img src="" width="50px" height="50px" id="ImgPh03"/>
+                        </div>
+                        <div class="img04">
+                            <input type="file" name="pic4" value="" id="inputstyle04"/>
+                            <span class="span04"></span>
+                            <img src="" width="50px" height="50px" id="ImgPh04"/>
+                        </div>
+                        <!-- <div class="img05">
+                            <input type="file" name="" value="" id="inputstyle05"/>
+                            <span class="span05"></span>
+                            <img src="" width="50px" height="50px" id="ImgPh05"/>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="btn">
+                    <input type="button" value="提交" class="submit-btn"/>
+                </div>
+            </form>
+        </div>
+        <!-- 地图-->
+        <div id="allmap03" style="display:none;"></div>
+        <!-- end地图-->
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/uploadPreview.min.js"></script>
+    <script type="text/javascript" src="js/uploadPreview.js"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script type="text/javascript" src="js/formValidatorRegex.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=EF505c8299ab5f1c2a98caf47b8d5c07&callback"></script>
+    <script type="text/javascript">
+        $(function(){
+
+            // 上传图片
+            $("#inputstyle01").uploadPreview({Img: "ImgPh01",Height:60, Width:60});
+            $("#inputstyle02").uploadPreview({Img: "ImgPh02",Height:60, Width:60});
+            $("#inputstyle03").uploadPreview({Img: "ImgPh03",Height:60, Width:60});
+            $("#inputstyle04").uploadPreview({Img: "ImgPh04",Height:60, Width:60});
+            $("#inputstyle05").uploadPreview({Img: "ImgPh05",Height:60, Width:60});
+            // 百度地图API功能
+            baiduMap("allmap03");
+            // 添加私有桩
+            $(".submit-btn").on("click",function(){
+
+                var url="http://180.96.17.120:8000/webservice/services/IcCardWebService/addPrivatePole?response=application/json";
+                $("#myForm").attr("action", url);
+                
+                var regContact =/^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;//联系方式正则
+                var identity=1;
+                var cardNo=getLocalStorage("cardno");
+                var pass=getLocalStorage("pass");
+                var addr=$(".addr").val();
+                var poleName=$(".poleName").val();
+                var tel=$(".tel").val();
+                var type=$(".type").val();
+                var model=$(".model").val();
+                var pic1;
+                var pic2;
+                var pic3;
+                var pic4;
+                var data={
+                    identity: identity,
+                    cardNo: cardNo,
+                    pass: pass,
+                    addr: addr,
+                    poleName: poleName,
+                    tel: tel,
+                    pic1: pic1,
+                    pic2: pic2,
+                    pic3: pic3,
+                    pic4: pic4,
+                    lat: lat,
+                    lon: lon,
+                    type: type,
+                    model: model
+                }
+
+                var options = {  
+                   // target: '#output',          //把服务器返回的内容放入id为output的元素中      
+                   // beforeSubmit: showRequest,  //提交前的回调函数  
+                   // url: url,                   //默认是form的action， 如果申明，则会覆盖  
+                   // type: "post",               //默认是form的method（get or post），如果申明，则会覆盖  
+                   data:data,
+                   dataType: "json",           //html(默认), xml, script, json...接受服务端返回的类型  
+                   // crossDomain: true,
+                   success: callback     //提交后的回调函数  
+                   // clearForm: true,          //成功提交后，清除所有表单元素的值  
+                   // resetForm: true,          //成功提交后，重置所有表单元素的值  
+                   // timeout: 3000               //限制请求的时间，当请求大于3秒后，跳出请求  
+                }
+
+                if(poleName==""){
+                    tipInformation("请输入私有桩名称！",function(){});
+                    return false;
+                }else if(tel==""){
+                    tipInformation("请输入电话！",function(){});
+                    return false;
+                }else if(!regContact.test(tel)){
+                    tipInformation("请输入正确的联系方式！",function(){});
+                    return false;
+                }else if(addr==""){
+                    tipInformation("请输入地址！",function(){});
+                    return false;
+                }
+
+                $("#myForm").ajaxSubmit(options);
+                function callback(result) {
+                    var a=processData(result);
+                    tipInformation(a.message,function(){});
+                    if(a.success){
+                        location.href="piles.html";
+                    }
+                }
+            })
+
+        })
+    </script>
+</body>
+</html>

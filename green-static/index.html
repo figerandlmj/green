@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css?v=001">
+    <link rel="stylesheet" type="text/css" href="css/index.css?v=2015101510">
+    <title>附近-地图</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header mui-flex">
+            <div class="cell fixed">
+                <span class="fl fl-href" id="islogin"></span>
+            </div>
+            <div class="search cell">
+                <from action="" method="POST">
+                    <input type="text" placeholder="搜索城市/位置/充电站名称"  />
+                    <input type="submit" class="search-button" value="">
+                </from>
+            </div>
+            <div class="cell fixed">
+                <a href="near_list.html"><span class="fr fr-add fr-href"></span></a>
+            </div>
+        </div>
+        <!-- 地图-->
+        <div id="allmap"></div>
+        <!-- end地图-->
+        <div class="filter"><img src="img/filter.png"/></div>
+        <div class="filter-type">
+            <div class="title"><label>类型</label><span class="close-type"></span></div>
+            <ul>
+                <li><span class="sel-btn selected"></span>快充</li>
+                <li><span class="sel-btn unselected"></span>慢充</li>
+                <li><span class="sel-btn selected"></span>高速</li>
+                <li class="li04">只看可用<span class="see unbtn"></span></li>
+            </ul>
+        </div>
+        <div class="footer ">
+            <ul class="mui-flex">
+                <li class="li01-current current cell"><a href="index.html"><span></span></a></li>
+                <li class="li02 cell to-order"><a><span></span></a></li>
+                <li class="li03 cell to-appointment"><a><span></span></a></li>
+                <li class="li04 cell" onclick="inputScan();" id="btn"><a href="javascript:void(0);"><span></span></a></li>
+                <li class="li05 cell"><a href="common_function.html"><span></span></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="mask"></div>
+    <!-- 充电站信息框-->
+   <!--  <div class="map-box01" style="display:block;">
+        <div class="title">
+            <label>安德门充电站安德门充电站安德门充电站安德门充电站</label>
+            <span class="heart"></span>
+            <span class="tel"></span>
+        </div>
+        <div class="clearfix"></div>
+        <div class="content">
+            <div class="fl left">
+                <p class="p01">
+                    <label>服&nbsp;&nbsp;&nbsp;&nbsp;务</label>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </p>
+                <p class="p02"><span class="fl"></span><em class="fl">安德门大街15号安德门大街15号安德门大街15号安德门大街15号</em><label class="fl distance">3.223</label><label class="fl">km</label></p>
+            </div>
+            <div class="fr right"></div>
+        </div>
+        <div class="bottom-href">
+            <div class="fl">
+                <span class="span01"></span>
+                <label>导 航</label>
+            </div>
+            <div class="fl">
+                <span class="span02"></span>
+                <label>预约充电</label>
+            </div>
+        </div>
+        <div class="triangle"></div>
+    </div> -->
+    <!-- end充电站信息框-->
+    <!-- 所在位置信息框-->
+    <div class="map-box02">
+        <div class="title">
+            <span class="span01">我在<label></label>附近</span>
+            <!-- <span class="span02"></span> -->
+        </div>
+        <!-- <div class="triangle"></div> -->
+    </div>
+    <!-- end所在位置信息框-->
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/barcodescanner.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=EF505c8299ab5f1c2a98caf47b8d5c07&callback"></script>
+    <script type="text/javascript">
+    $(function(){
+
+        // 显示风火轮
+        circleMask();
+        //自适应屏幕宽高
+        $("#allmap").css({
+            "min-height":$(window).height()
+        })
+        $(window).resize(function(){
+            $("#allmap").css({
+                "min-height":$(window).height()
+            })
+        });
+        $(".container").css({
+            "padding-bottom":"0px"
+        })
+        // 信息框位置居中
+        boxCenter(".map-box01");
+        boxCenter(".map-box02");
+        // 关闭信息框
+        $("#mask").on("click",function(){
+            $("#mask").hide();
+            $(".map-box01").hide();
+            $(".map-box02").hide();
+
+        })
+
+        searchChargePole(0);
+        function searchChargePole(status){
+            // 百度地图API功能
+            var map = new BMap.Map("allmap");
+            var geolocation = new BMap.Geolocation();
+            var lat,lon;  //经度和纬度
+            geolocation.getCurrentPosition(function(r){
+                if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                    lat=r.point.lat;
+                    lon=r.point.lng;
+                    var point = new BMap.Point(r.point.lng,r.point.lat);
+                    map.centerAndZoom(point,12);
+                    //创建标注图标
+                    var myIcon = new BMap.Icon("img/current_position.png", new BMap.Size(60,60));
+                    var marker = new BMap.Marker(point,{icon:myIcon});  // 创建标注
+                    map.addOverlay(marker);// 将标注添加到地图中
+                    
+                    // 获取附近充电站
+                    var url="StationWebService/searchChargePoleAll";
+                    var data={
+                        lat:lat,
+                        lon:lon,
+                        radius:100,
+                        type:0,
+                        status:status,
+                        startTime:-1,
+                        endTime:-1,
+                        regid:""
+                    }
+                    ajaxGetRequest(url, data, callback);
+
+                    var point01 =[];
+                    var myIcon01 = [];
+                    var marker01 = [];
+                    function callback(result) {
+
+                        var a=processData(result);
+                        if(a.stationlist.length>0){
+                            setLocalStorage("station_id", a.stationlist[0].id);
+                            setLocalStorage("appointment_return", 0);
+                        }
+                        for(var i=0;i<a.stationlist.length;i++){
+
+                            (function(item){
+
+                                var node_html = '';
+                                node_html+='<div class="map-box01 map-box'+item+'">';
+                                node_html+='    <div class="title">';
+                                node_html+='        <label>'+a.stationlist[item].name+'</label>';
+                                node_html+='        <span class="heart" data-id="'+a.stationlist[item].id+'"></span>';
+                                node_html+='        <span class="tel"><a href="tel:'+a.stationlist[item].telephone+'"></a></span>';
+                                node_html+='    </div>';
+                                node_html+='    <div class="clearfix"></div>';
+
+                                node_html+=' <div class="content" data-id="'+a.stationlist[item].id+'">';
+                                node_html+='       <div class="fl left">';
+                                node_html+='           <p class="p01">';
+                                node_html+='                <label>服&nbsp;&nbsp;&nbsp;&nbsp;务</label>';
+                                node_html+='                <span></span>';
+                                node_html+='                <span></span>';
+                                node_html+='                <span></span>';
+                                node_html+='                <span></span>';
+                                node_html+='           </p>';
+                                node_html+='           <p class="p02"><span class="fl"></span><em class="fl">'+a.stationlist[item].addr+'</em><label class="fl distance">'+a.stationlist[item].distance+'</label><label class="fl">km</label></p>';
+                                node_html+='       </div>';
+                                node_html+='       <div class="fr right"></div>';
+                                node_html+=' </div>';
+
+                                node_html+='    <div class="bottom-href">';
+                                node_html+='        <div class="fl navigation" data-lat="'+a.stationlist[item].lat+'" data-lon="'+a.stationlist[item].lon+'">';
+                                node_html+='            <span class="span01"></span>';
+                                node_html+='            <label>导 航</label>';
+                                node_html+='        </div>';
+
+                                node_html+='        <div class="fl appointment-btn" data-id="'+a.stationlist[item].id+'">';
+                                node_html+='            <span class="span02"></span>';
+                                node_html+='            <label>预约充电</label>';
+                                node_html+='        </div>';
+
+                                node_html+='    </div>';
+                                node_html+='</div>';
+
+                                var $node_html = $(node_html);
+                                $("#mask").after($node_html);
+                                boxCenter(".map-box01");
+
+                                point01[item] = new BMap.Point(a.stationlist[item].lon,a.stationlist[item].lat);
+                                map.centerAndZoom(point01[item],12);
+
+                                //创建标注图标
+                                myIcon01[item] = new BMap.Icon("img/piles.png", new BMap.Size(60,60));
+                                marker01[item] = new BMap.Marker(point01[item],{icon:myIcon01[item]});  // 创建标注
+                                marker01[item].addEventListener("click", function(){
+                                    $("#mask").show();
+                                    $node_html.show();
+                                });
+                                map.addOverlay(marker01[item]);// 将标注添加到地图中
+
+                            })(i);
+                        }
+                        // 关闭风火轮
+                        $("#circle_mask").hide();
+                        $("#circle_img").hide();
+
+                    }
+
+                    var pt = r.point;
+                    var geoc = new BMap.Geocoder();   
+                    geoc.getLocation(pt, function(rs){
+                        var addComp = rs.addressComponents;
+                        // alert(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
+                        // 创建信息窗口
+                        var opts = {
+                            width : 100,     // 信息窗口宽度
+                            title : ""  // 信息窗口标题
+                        }
+
+                        // 创建信息窗口对象
+                        // var infoWindow = new BMap.InfoWindow("<div style='width:200px;'><div style='font-size: 20px;color:#3a3a3a;'><span>我在<label style='color:#ff7800;padding:0px 10px;'>"+addComp.district+addComp.street+"</label>附近</span></div></div>", opts);  
+                        
+                        marker.addEventListener("click", function(){
+                            $("#mask").show();
+                            $(".map-box02 label").text(addComp.district+addComp.street);
+                            $(".map-box02").show();
+                            // map.openInfoWindow(infoWindow, map.getCenter());      // 打开信息窗口
+                        });
+                    });   
+
+                }else{
+                    tipInformation('failed'+this.getStatus(),function(){});
+                }
+                        
+            },{enableHighAccuracy: true})
+        }
+
+        // 点击进入充电站详情页
+        $("body").on("click",".content",function(){
+            var this_id=$(this).data("id");
+            setLocalStorage("station_id", this_id);
+            setLocalStorage("near_detail_return", 0);
+            location.href="near_detail.html";
+        })
+        // 点击预约充电进入我要充电页
+        $("body").on("click",".appointment-btn",function(){
+            var islogin = getLocalStorage("islogin");
+            if(islogin==1){
+                var this_id=$(this).data("id");
+                setLocalStorage("station_id", this_id);
+                setLocalStorage("appointment_return", 0);
+                location.href="appointment.html";
+            }else{
+                tipInformation("请登陆！",function(){location.href="login.html";});
+            }
+        })
+
+        // 添加收藏
+        $("body").on("click",".heart",function(){
+            var islogin = getLocalStorage("islogin");
+            if(islogin==1){
+                var identity=1;
+                var cardNo=getLocalStorage("cardno");
+                var pass=getLocalStorage("pass");
+                var facId=$(this).data("id");
+                var facType=1;
+                var data={
+                    identity: identity,
+                    cardNo: cardNo,
+                    pass: pass,
+                    facId: facId,
+                    facType: facType
+                }
+                var url="IcCardWebService/addCollect";
+                ajaxGetRequest(url, data, callback);
+                function callback(result) {
+                    var a=processData(result);
+                    tipInformation(a.message,function(){});
+                    if(a.success){
+                        $(this).addClass("hearted");
+                    }
+                }
+            }else{
+                tipInformation("请登陆！",function(){location.href="login.html";});
+            }
+        })
+        
+        // 点击进入导航页
+        $("body").on("click",".navigation",function(){
+            setLocalStorage("endlon", $(this).data("lon"));
+            setLocalStorage("endlat", $(this).data("lat"));
+            setLocalStorage("navigation_map_return",0);
+            location.href="navigation_map.html";
+        })
+
+        // 筛选类型
+        $(".filter").on("click",function(){
+            $(".filter-type").toggle();
+        })
+        $(".close-type").on("click",function(){
+            $(".filter-type").hide();
+        })
+        $(".sel-btn").on("click",function(){
+            if($(this).hasClass("selected")){
+                $(this).removeClass("selected");
+                $(this).addClass("unselected");
+            }else if($(this).hasClass("unselected")){
+                $(this).removeClass("unselected");
+                $(this).addClass("selected");
+            }
+        })
+        $(".see").on("click",function(){
+            if($(this).hasClass("btn")){
+                $(this).removeClass("btn");
+                $(this).addClass("unbtn");
+                var status=0;
+            }else if($(this).hasClass("unbtn")){
+                $(this).removeClass("unbtn");
+                $(this).addClass("btn");
+                var status=1;
+            }
+            searchChargePole(status);
+        })
+
+    });
+    // 有遮罩层时不可滑动页面
+    document.body.addEventListener('touchmove', function (event) {
+        if(!$("#mask").is(":hidden")) {
+           event.preventDefault();
+        }
+        if(!$(".mask").is(":hidden")) {
+           event.preventDefault();
+        }
+        if(!$("#circle_mask").is(":hidden")) {
+           event.preventDefault();
+        }
+    });
+    </script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/appoint.css?v=2015103022">
+    <title>桩位信息</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="near_detail.html"><span class="fl"></span></a>
+            <span>桩位信息</span>
+        </div>
+        <div class="pile-message-main">
+            <div class="list">
+                <div class="fl">
+                    <p class="p01"></p>
+                    <p class="p02">1#桩交流桩1#桩1#桩1#桩</p>
+                </div>
+                <div class="center">
+                    <p class="p01">
+                        <span class="guo">国</span>
+                        <span class="fast span02">快</span>
+                        <label>750V/50A</label>
+                    </p>
+                    <p class="p02 free">空闲中</p>
+                </div>
+                <div class="fr">
+                    <p class="p01"></p>
+                    <p class="p02">预约充电</p>
+                </div>
+            </div>
+            <div class="list">
+                <div class="fl">
+                    <p class="p01"></p>
+                    <p class="p02">1#桩</p>
+                </div>
+                <div class="center">
+                    <p class="p01">
+                        <span class="te">特</span>
+                        <span class="slow span02">慢</span>
+                        <label>750V/50A</label>
+                    </p>
+                    <p class="p02 charging">充电中</p>
+                </div>
+                <div class="fr">
+                    <p class="p01"></p>
+                    <p class="p02">预约充电</p>
+                </div>
+            </div>
+            <div class="list">
+                <div class="fl">
+                    <p class="p01"></p>
+                    <p class="p02">1#桩</p>
+                </div>
+                <div class="center">
+                    <p class="p01">
+                        <span class="te">特</span>
+                        <span class="idle span02">闲</span>
+                        <label>750V/50A</label>
+                    </p>
+                    <p class="p02 reserved">被预约</p>
+                </div>
+                <div class="fr">
+                    <p class="p01"></p>
+                    <p class="p02">预约充电</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript">
+    $(function(){
+
+        // 指定站id下的所有充电桩
+        var staId=getLocalStorage("station_id");
+        var data={
+            staId: staId
+        }
+        var url="StationWebService/getStationById";
+        ajaxGetRequest(url, data, callback);
+        function callback(result) {
+            var a=processData(result);
+            if(a.success){
+                var html = "";
+                if(a.station.polelist.length>0){
+                    for(var i=0; i<a.station.polelist.length;i++){
+                        var vol=Math.round(parseFloat(a.station.polelist[i].nomVol));
+                        var cur=Math.round(parseFloat(a.station.polelist[i].nomCurrent));
+                        var status=a.station.polelist[i].status;
+                        if(status==1){
+                            status="充电中";
+                        }else if(status==2){
+                            status="空闲中";
+                        }else if(status==3){
+                            status="故障中";
+                        }else if(status==4){
+                            status="离线中";
+                        }else if(status==5){
+                            status="就绪中";
+                        }else if(status==6){
+                            status="预约中";
+                        }
+                        html += '<div class="list">';
+                        html += '    <div class="fl">';
+                        html += '        <p class="p01"></p>';
+                        html += '        <p class="p02">'+a.station.polelist[i].name+'</p>';
+                        html += '    </div>';
+                        html += '    <div class="center">';
+                        html += '        <p class="p01">';
+                        html += '            <span class="guo">国</span>';
+                        html += '            <span class="fast span02">快</span>';
+                        html += '            <label>'+vol+'V/'+cur+'A</label>';
+                        html += '        </p>';
+                        html += '        <p class="p02 free">'+status+'</p>';
+                        html += '    </div>';
+                        html += '    <div class="fr appointment-btn" data-id="'+a.station.polelist[i].id+'">';
+                        html += '        <p class="p01"></p>';
+                        html += '        <p class="p02">预约充电</p>';
+                        html += '    </div>';
+                        html += '</div>';
+                    }
+                    $(".pile-message-main").html(html);
+                }
+            }
+        }
+        // 点击预约充电进入我要充电页
+        $("body").on("click",".appointment-btn",function(){
+            var staId=$(this).data("id");
+            var islogin = getLocalStorage("islogin");
+            if(islogin==1){
+                setLocalStorage("station_id", staId);
+                setLocalStorage("type", 2);
+                setLocalStorage("appointment_return", 4);
+                location.href="appointment.html";
+            }else{
+                tipInformation("请登陆！",function(){location.href="login.html";});
+            }
+        })
+
+    })
+    </script>
+</body>
+</html>

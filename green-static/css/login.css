@@ -1,0 +1,698 @@
+/*注册*/
+.register-main{
+    padding-top:8px;
+}
+.input-main{
+    height:198px;
+    background:#fff;
+}
+.input-main p{
+    height:50px;
+    border-bottom:1px solid #eeeeee;
+    line-height: 50px;
+}
+.input-main p input{
+    font-size:0.9em;
+    color:#c9c9c9;
+    border:0;
+}
+.input-main .p01 .fl{
+    font-size: 0.875em;
+    color:#a0a0a0;
+    margin-left:12px;
+}
+.input-main .p01 .fr{
+    font-size: 0.875em;
+    color:#333333;
+}
+.input-main .arrow{
+    display:inline-block;
+    width:10px;
+    height:18px;
+    background:url(../img/common.png);
+    background-position:-5px -5px;
+    background-size: 250px 200px;
+    margin:16px 12px 0px 29px;
+}
+.input-main .p02 span{
+    display:inline-block;
+    width:17px;
+    height:19px;
+    background:url(../img/common.png);
+    background-position:-25px -4px;
+    background-size: 250px 200px;
+    position:relative;
+    top:3px;
+    margin:0px 12px;
+}
+.input-main .p03 span.fl{
+    display:inline-block;
+    width:16px;
+    height:18px;
+    background:url(../img/common.png);
+    background-position:-52px -4px;
+    background-size: 250px 200px;
+    position:relative;
+    top:13px;
+    margin:0px 12px;
+}
+.input-main .p03 .fr{
+    width:124px;
+    height:50px;
+    background: #73be1e;
+    font-size: 0.875em;
+    color:#fff;
+    text-align: center;
+}
+.input-main .p04 span{
+    display:inline-block;
+    width:16px;
+    height:19px;
+    background:url(../img/common.png);
+    background-position:-75px -4px;
+    background-size: 250px 200px;
+    position:relative;
+    top:3px;
+    margin:0px 12px;
+}
+.register-main .protocol{
+    font-size: 0.625em;
+    color:#333333;
+    margin:17px 0px 0px 17px;
+}
+.register-main .protocol span{
+    display:inline-block;
+    width:15px;
+    height:15px;
+    background:url(../img/common.png);
+    background-position:-99px -6px;
+    background-size: 250px 200px;
+    position:relative;
+    top:4px;
+    right:5px;
+}
+.register-main .protocol a{
+    font-size: 0.9em;
+    color:#73be1e;
+}
+.register-main .submit-btn{
+    margin:267px 0px 14px 0px;
+    text-align: center;
+}
+.register-main .submit-btn input{
+    width:70%;
+    height:50px;
+    background: #73be1e;
+    border:0;
+    -moz-border-radius: 6px; /* Firefox */
+    -webkit-border-radius: 6px; /* Safari 和 Chrome */
+    border-radius:6px;
+    font-size: 1em;
+    color:#fff;
+}
+/*登陆*/
+.login-main .input-main{
+    height:100px;
+}
+.login-main .forget-password{
+    margin:13px 15px 0px 0px;
+}
+.login-main .forget-password a{
+    font-size:0.75em;
+    color:#f64f1c;
+    float:right;
+}
+.login-main .submit-btn{
+    margin:18px 0px 14px 0px;
+}
+/*忘记密码*/
+.password-main .submit-btn{
+    margin:17px 0px 14px 0px;
+}
+/*个人中心*/
+.personal-main .member{
+    height:92px;
+    background:#fff;
+    border-bottom:1px solid #e5e5e5;
+}
+.personal-main .member span{
+    display: inline-block;
+}
+.personal-main .member .img{
+    margin:11px 18px 11px 11px;
+}
+.personal-main .member .msg{
+    font-size:0.875em;
+    color:#000;
+    position:relative;
+    bottom:17px;
+    line-height: 25px;
+}
+.personal-main .arrow{
+    display:inline-block;
+    width:15px;
+    height:24px;
+    background:url(../img/common.png);
+    background-position:-116px -35px;
+    background-size: 250px 200px;
+    float:right;
+    margin:35px 12px 0px 0px;
+}
+.personal-main .member02{
+    height:60px;
+    background:#fff;
+    text-align: center;
+}
+.personal-main .member02 .wallet{
+    width:50%;
+    height:50px;
+    margin-top:5px;
+    border-right:1px solid #e5e5e5;
+}
+.personal-main .member02 p{
+    font-size:0.875em;
+    color:#323232;
+}
+.personal-main .member02 .wallet .left{
+    margin:5px 0px 0px 28px;
+}
+.personal-main .member02 .wallet .left span{
+    display:inline-block;
+    width:21px;
+    height:24px;
+    background:url(../img/common.png);
+    background-position:-123px -2px;
+    background-size: 250px 200px;
+}
+.personal-main .member02 .wallet .right{
+    margin:10px 17px 0px 0px;
+}
+.personal-main .member02 .wallet .right p{
+    font-size:0.75em;
+    color:#ff6600;
+}
+.personal-main .member02 .wallet .right span{
+    display:inline-block;
+    width:58px;
+    height:18px;
+    background: #73be1e;
+    font-size:0.75em;
+    color:#fff;
+    text-align: center;
+    line-height: 18px;
+    -moz-border-radius: 20px; /* Firefox */
+    -webkit-border-radius: 20px; /* Safari 和 Chrome */
+    border-radius:20px;
+    margin-top:3px;
+}
+.personal-main .member02 .news{
+    margin:9px 55px 0px 0px;
+}
+.personal-main .member02 .news span{
+    display:inline-block;
+    width:23px;
+    height:24px;
+    background:url(../img/common.png);
+    background-position:-150px -2px;
+    background-size: 250px 200px;
+}
+.personal-main .member02 .news .news-num{
+    width:17px;
+    height:17px;
+    background: #ff3333;
+    -moz-border-radius: 50%; /* Firefox */
+    -webkit-border-radius: 50%; /* Safari 和 Chrome */
+    border-radius:50%;
+    line-height: 17px;
+    font-size: 0.75em;
+    color:#fff;
+    position:relative;
+    left:50px;
+    bottom:45px;
+}
+.personal-main .my{
+    height:45px;
+    background: #fff;
+    border-bottom:1px solid #e5e5e5;
+    margin-top:11px;
+    line-height: 45px;
+    padding-left:12px;
+    border-bottom:1px solid #e5e5e5;
+}
+.personal-main .my .span01{
+    display:inline-block;
+    width:27px;
+    height:20px;
+    background:url(../img/common.png);
+    background-position:-184px -4px;
+    background-size: 250px 200px;
+    position: relative;
+    top:5px;
+}
+.personal-main .my .span02{
+    font-size:0.875em;
+    color:#323232;
+    margin-left:10px;
+}
+.personal-main .my .span04{
+    display:inline-block;
+    width:69px;
+    height:24px;
+    background:url(../img/common.png);
+    background-position:-39px -33px;
+    background-size: 250px 200px;
+    float:right;
+    margin:10px 23px 0px 0px;
+}
+.personal-main .my .span03{
+    display:inline-block;
+    width:15px;
+    height:24px;
+    background:url(../img/common.png);
+    background-position:-116px -35px;
+    background-size: 250px 200px;
+    float:right;
+    margin:10px 12px 0px 0px;
+}
+.personal-main .setting{
+    margin-top:0px;
+}
+.personal-main .setting .span01{
+    width:27px;
+    height:29px;
+    background-position:-219px -2px;
+    top:8px;
+}
+.personal-main .about{
+    margin-top:0px;
+}
+.personal-main .about .span01{
+    width:25px;
+    height:25px;
+    background-position:-3px -32px;
+    top:8px;
+}
+.personal-main .submit-btn,.recharge-main .submit-btn{
+    text-align: center;
+    margin-top:27px;
+}
+.personal-main .submit-btn input,.recharge-main .submit-btn input{
+    /*width: 335px;*/
+    width:93%;
+    height: 50px;
+    background: #73be1e;
+    border: 0;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    font-size: 1em;
+    color: #fff;
+    text-align: center;
+}
+/*我的钱包*/
+.wallet-main .my{
+    margin-top:0px;
+}
+.wallet-main .my .span01{
+    width:26px;
+    height:28px;
+    background-position:-137px -32px;
+    top:8px;
+}
+.wallet-main .my .money{
+    font-size:0.875em;
+    color:#ff2c2a;
+    float:right;
+    margin-right:12px;
+}
+.wallet-main .setting .span01{
+    width:26px;
+    height:26px;
+    background-position:-172px -34px;
+}
+.wallet-main .about .span01{
+    width:21px;
+    height:27px;
+    background-position:-203px -34px;
+    margin-right:5px;
+}
+/*消息中心*/
+.news-main .setting .span01{
+    width:26px;
+    height:23px;
+    background-position:-5px -63px;
+}
+.news-main .about .span01{
+    width:27px;
+    height:28px;
+    background-position:-3px -90px;
+    margin-right:0px;
+}
+/*关于我们*/
+.about-main .top{
+    height:185px;
+    font-size:0.8em;
+    color:#000;
+    text-align: center;
+}
+.about-main .top .img{
+    padding-top:30px;
+}
+.about-main .top .msg{
+    padding-top:10px;
+}
+.about-main .my{
+    margin-top:0px;
+}
+.about-main .my .span01{
+    width:25px;
+    height:26px;
+    background-position:-39px -62px;
+    top:8px;
+}
+.about-main .my .span03{
+    width:10px;
+    height:20px;
+    background:url(../img/common.png);
+    background-position:-36px -95px;
+    background-size: 250px 200px;
+    margin:13px 12px 0px 0px;
+}
+.about-main .my .tip{
+    font-size:0.75em;
+    color:#bebaba;
+    float:right;
+    margin-right:17px;
+}
+.about-main .recommend .span01{
+    width:26px;
+    height:25px;
+    background-position:-69px -62px;
+}
+.about-main .opinion .span01{
+    width:26px;
+    height:26px;
+    background-position:-104px -63px;
+}
+.about-main .evaluation .span01{
+    width:26px;
+    height:23px;
+    background-position:-138px -64px;
+}
+.about-main .contact .span01{
+    height:28px;
+    background-position:-169px -64px;
+}
+.about-main .past .span01{
+    width:25px;
+    height:25px;
+    background-position:-204px -65px;
+}
+.about-main .contact .tip{
+    margin-right:36px;
+}
+/*建议优化*/
+.opinion-main{
+    height:265px;
+    background: #fff;
+    padding-top:0px;
+}
+.opinion-main .input-main{
+    height:auto;
+    padding:14px 0px 0px 0px;
+    text-align: center;
+}
+.opinion-main .input-main textarea{
+    width:89%;
+    height:125px;
+    border:1px solid #dcdcdc;
+    font-size: 0.75em;
+    color:#c3c5c4;
+    padding:10px;
+    resize: none;
+}
+.opinion-main .word{
+    font-size: 0.75em;
+    color:#c3c5c4;
+    float:right;
+    margin-right:5px;
+}
+/*个人信息*/
+.information-main .member{
+    height:80px;
+}
+.information-main .member .msg{
+    line-height: 30px;
+    bottom:0px;
+    top:10px;
+    left:12px;
+}
+.information-main .member .msg label{
+    font-size: 0.75em;
+    color: #a9a9a9;
+}
+.information-main .member .img{
+    float:right;
+    margin:13px 18px 11px 11px;
+}
+.information-main .member .img img{
+    float:right;
+}
+.information-main .member .img input{
+    width:84px;
+    height:50px;
+    position:relative;
+    right:-80px;
+    opacity:0;
+    float:right;
+}
+
+.information-main .arrow{
+    margin:25px 12px 0px 0px;
+}
+.information-main .my .tip{
+    font-size:0.75em;
+    color:#bebaba;
+    float:right;
+    margin-right:17px;
+    border: 0;
+    position: relative;
+    top: 16px;
+    text-align: right;
+}
+.information-main .my .span02{
+    color:#323232;
+    margin-left:0px;
+}
+.information-main .remove-top{
+    margin-top:0px;
+}
+.information-main .my .tip-btn{
+    font-size:0.75em;
+    float:right;
+    margin-right:17px;
+    width:48px;
+    height:18px;
+    background: #c9c9c9;
+    -moz-border-radius: 6px; /* Firefox */
+    -webkit-border-radius: 6px; /* Safari 和 Chrome */
+    border-radius:6px;
+    text-align: center;
+    line-height: 18px;
+    color:#fff;
+    margin-top:13px;
+}
+.information-main .submit-btn{
+    margin:27px 0px 14px 0px;
+}
+/*车辆信息列表*/
+.carlist-main{
+    padding-top:0px;
+}
+.carlist-main .input-main{
+    height:auto;
+}
+.carlist-main .input-main p{
+    height:70px;
+    line-height: 25px;
+}
+.carlist-main .input-main .p01 .fl{
+    font-size: 0.9em;
+    color:#000;
+    margin-top:24px;
+}
+.carlist-main .input-main .p01 .fl label{
+    font-size: 0.75em;
+}
+.carlist-main .input-main .status{
+    width:50px;
+    height:19px;
+    background: #b7c0c8;
+    font-size: 0.75em;
+    color:#fff;
+    text-align: center;
+    line-height: 19px;
+    -moz-border-radius: 6px; /* Firefox */
+    -webkit-border-radius: 6px; /* Safari 和 Chrome */
+    border-radius:6px;
+    margin:26px 9px 0px 0px;
+}
+.carlist-main .input-main .num{
+    font-size: 0.875em;
+    color: #787878;
+    margin-top:23px;
+}
+.carlist-main .input-main .arrow{
+    margin:26px 12px 0px 29px;
+}
+/*车辆信息详情*/
+.cardetail-main{
+    padding-top:0px;
+}
+.cardetail-main .my{
+    margin-top:0px;
+}
+.cardetail-main .top{
+    height:37px;
+    background: #eeeeee;
+    font-size: 0.875em;
+    color:#787878;
+    line-height: 37px;
+    padding-left:10px;
+}
+.cardetail-main .my .span02{
+    color:#000;
+}
+.cardetail-main .line-height{
+    line-height: 20px;
+}
+.cardetail-main .line-height .span02{
+    display:inline-block;
+    margin-top:10px;
+}
+.cardetail-main .line-height .tip{
+    margin-top:3px;
+}
+.cardetail-main .my .span03{
+    width: 10px;
+    height: 18px;
+    background-position: -5px -5px;
+    margin:13px 12px 0px 0px;
+}
+.cardetail-main .my .tip{
+    position: relative;
+    top: 14px;
+}
+.cardetail-main .my .tip img{
+    margin-top:-7px;
+    float:right;
+}
+.cardetail-main .my .tip input{
+    width: 32px;
+    height: 32px;
+    position: relative;
+    right: -30px;
+    opacity: 0;
+    float: right;
+    bottom: 10px;
+}
+
+/*我要充值*/
+.recharge-main .money{
+    height:45px;
+    background: #fff;
+    line-height: 45px;
+}
+.recharge-main .money .lab01{
+    float:left;
+    font-size: 0.875em;
+    color: #000;
+    padding-left:15px;
+}
+.recharge-main .money .lab02{
+    float:right;
+    font-size: 0.875em;
+    color: #ff2c2a;
+    padding-right:25px;
+}
+.recharge-main .money input{
+    float:right;
+    border: 0;
+    font-size: 0.875em;
+    color: #ff2c2a;
+    text-align: right;
+    margin-top:14px;
+}
+.recharge-main .title{
+    height:26px;
+    background: #eeeeee;
+    font-size: 0.875em;
+    color: #8b8b8b;
+    line-height: 26px;
+    margin-left:15px;
+}
+.recharge-main .type{
+    height:45px;
+    background: #fff;
+    padding-left:15px;
+    border-bottom: 1px solid #eeeeee;
+    line-height: 45px;
+}
+.recharge-main .type .span01{
+    display: inline-block;
+    width:43px;
+    height:15px;
+    background:url(../img/common03.png);
+    background-position:-38px -9px;
+    background-size: 250px 200px;
+    position:relative;
+    top:3px;
+    margin-right:25px;
+}
+.recharge-main .type .selected{
+    display: inline-block;
+    width:26px;
+    height:20px;
+    background:url(../img/common03.png);
+    background-position:-38px -83px;
+    background-size: 250px 200px;
+    float: right;
+    margin:11px 22px 0px 0px;
+}
+.recharge-main .type label{
+    font-size: 0.875em ;
+    color:#000;
+}
+.recharge-main .type02 .span01{
+    width:28px;
+    height:27px;
+    background-position:-36px -28px;
+    top:8px;
+    margin:0px 36px 0px 4px;
+}
+.recharge-main .type03 .span01{
+    width:37px;
+    height:23px;
+    background-position:-36px -58px;
+    top:3px;
+    margin-right:32px;
+}
+.recharge-main .type .unselected{
+    display:inline-block;
+    width:90px;
+    height:45px;
+    float:right;
+    font-size: 0.875em;
+    color:#767676;
+/*    padding-right:13px;*/
+}
+.recharge-main .type .not-open{
+    display:inline-block;
+    width:90px;
+    height:45px;
+    float:right;
+    font-size: 0.875em;
+    color:#767676;
+/*    padding-right:13px;*/
+}
+

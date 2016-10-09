@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css?v=2015102710">
+    <link rel="stylesheet" type="text/css" href="css/appoint.css?v=2015102933">
+    <title>充电站详情</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a class="back"><span class="fl"></span></a>
+            <span>充电站详情</span>
+            <span class="fr fr-heart"></span>
+        </div>
+        <div class="near-detail-main">
+            <div class="img"><img src="img/store_img.png" width="100%" height="180px"/></div>
+            <div class="collection-list">
+                <p class="p01">
+                    <label id="name"></label>
+                    <span class="span01">1#直流桩</span>
+                    <span class="span02"></span>
+                    <span class="span02"></span>
+                    <span class="span02"></span>
+                    <span class="span02"></span>
+                    <span class="span02"></span>
+                </p>
+                <p class="p02">
+                    <span class="span01 fl"></span>
+                    <label class="label01" id="addr"></label>
+                    <label class="fr label02"><em id="distance"></em>km</label>
+                </p>
+            </div>
+            <div class="feedback">
+                <div class="tel fl"><span><a href="" id="telephone"></a></span><label>电话</label></div>
+                <div class="error fl"><span></span><label>报错</label></div>
+                <div class="message fr"><span></span><label>留言</label></div>
+            </div>
+            <div class="date">
+                <div class="fl left">
+                    <p class="p01"></p>
+                    <p class="p02">开放时间</p>
+                </div>
+                <div class=" fl right">
+                    <p class="p01">
+                        <label class="lab01">工作日</label>
+                        <label class="lab02">8:30</label>
+                        <span></span>
+                        <label class="lab03">18:30</label>
+                    </p>
+                    <p>
+                        <label class="lab01">节假日</label>
+                        <label class="lab02">7:30</label>
+                        <span></span>
+                        <label class="lab03">19:00</label>
+                    </p>
+                </div>
+            </div>
+            <div class="sum">
+                <div class="fl">
+                    <span class="span01">快</span>
+                    <label>4个</label>
+                    <span class="span02">闲</span>
+                    <label>3个</label>
+                    <span class="span03">慢</span>
+                    <label>2个</label>
+                </div>
+                <a href="pile_message.html">
+                    <div class="fr">
+                        <label>查看</label>
+                        <span class="span04"></span>
+                    </div>
+                </a>
+            </div>
+            <div class="discuss">
+                <p class="title">车友评论</p>
+                <!-- <div class="list">
+                    <div class="fl left"><img src="img/user_img.png" width="38px" height="39px"/></div>
+                    <div class="fl right">
+                        <p class="p01">
+                            <label class="lab01">沐筱暖</label>
+                            <label class="lab02 fr">2015-09-12&nbsp;&nbsp;&nbsp;12:25:30</label>
+                        </p>
+                        <p class="p02">
+                            <label class="lab01">充电很快呀，服务比较赞！赞！</label>
+                            <label class="lab02 fr">回复</label>
+                            <span class="fr"></span>
+                        </p>
+                    </div>
+                </div> -->
+            </div>
+            <div class="clearfix"></div>
+            <div class="bottom-href">
+                <a href="navigation_map.html">
+                    <div class="fl">
+                        <span class="span01"></span>
+                        <label>导 航</label>
+                    </div>
+                </a>
+                <div class="fr appointment-btn">
+                    <span class="span02"></span>
+                    <label>预约充电</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript">
+    $(function(){
+
+        // 充电站详情
+        var staId=getLocalStorage("station_id");
+        var data={
+            staId: staId
+        }
+        var url="StationWebService/getStationById";
+        ajaxGetRequest(url, data, callbackDetail);
+        function callbackDetail(result) {
+            var a=processData(result);
+            if(a.success){
+                $("#name").text(a.station.name);
+                $("#addr").text(a.station.addr);
+                $("#distance").text(a.station.distance);
+                $("#telephone").href("tel:"+a.station.telephone);
+                $(".appointment-btn").attr("data-id",a.station.id);
+            }
+        }
+        // 留言
+        // var identity=1;
+        // var cardNo="3070120160119001";
+        // var pass="123456";
+        // var staId=1;
+        // var message="aaa";
+        // var data={
+        //     identity: identity,
+        //     cardNo: cardNo,
+        //     pass: pass,
+        //     staId: staId,
+        //     message: message
+        // }
+        // var url="IcCardWebService/comment";
+        // ajaxGetRequest(url, data, callback);
+        // function callback(result) {
+        //     var a=processData(result);
+        //     tipInformation(a.message,function(){});
+        // }
+        // 评论列表
+        var identity=1;
+        var cardNo=getLocalStorage("cardno");
+        var pass=getLocalStorage("pass");
+        var data={
+            identity: identity,
+            cardNo: cardNo,
+            pass: pass,
+            staId: staId
+        }
+        var url="IcCardWebService/getComment";
+        ajaxGetRequest(url, data, callbackComment);
+        function callbackComment(result) {
+            var a=processData(result);
+            if(a.success){
+                var html = "";
+                for(var i=0; i<a.list.length; i++){
+                    html += '<div class="list">';
+                    html += '    <div class="fl left"><img src="'+a.list[i].heardImage+'" width="38px" height="39px"/></div>';
+                    html += '    <div class="fl right">';
+                    html += '        <p class="p01">';
+                    html += '            <label class="lab01">'+a.list[i].userName+'</label>';
+                    html += '            <label class="lab02 fr">'+a.list[i].date+'</label>';
+                    html += '        </p>';
+                    html += '        <p class="p02">';
+                    html += '            <label class="lab01">'+a.list[i].commMess+'</label>';
+                    html += '            <label class="lab02 fr">回复</label>';
+                    html += '            <span class="fr"></span>';
+                    html += '        </p>';
+                    html += '    </div>';
+                    html += '</div>';
+                }
+                $(".discuss").append(html);
+            }
+        }
+        // 读取站的开放时间
+        // var data={
+        //     staId: staId
+        // }
+        // var url="StationWebService/getStaOpenTimeByStaId";
+        // ajaxGetRequest(url, data, callback);
+        // function callback(result) {
+        //     var a=processData(result);
+        //     tipInformation(a.message,function(){});
+        // }
+        // 点击预约充电进入我要充电页
+        $(".appointment-btn").on("click",function(){
+            var islogin = getLocalStorage("islogin");
+            if(islogin==1){
+                setLocalStorage("station_id", staId);
+                setLocalStorage("appointment_return", 3);
+                location.href="appointment.html";
+            }else{
+                tipInformation("请登陆！",function(){location.href="login.html";});
+            }
+        })
+        // 添加收藏
+        $(".fr-heart").on("click",function(){
+            var islogin = getLocalStorage("islogin");
+            if(islogin==1){
+                var identity=1;
+                var cardNo=getLocalStorage("cardno");
+                var pass=getLocalStorage("pass");
+                var facId=$(this).data("id");
+                var facType=1;
+                var data={
+                    identity: identity,
+                    cardNo: cardNo,
+                    pass: pass,
+                    facId: facId,
+                    facType: facType
+                }
+                var url="IcCardWebService/addCollect";
+                ajaxGetRequest(url, data, callback);
+                function callback(result) {
+                    var a=processData(result);
+                    tipInformation(a.message,function(){});
+                    if(a.success){
+                        $(this).addClass("cancel-heart");
+                    }
+                }
+            }else{
+                tipInformation("请登陆！",function(){location.href="login.html";});
+            }
+        })
+        // 取消收藏
+        $("body").on("click",".cancel-heart",function(){
+            var islogin = getLocalStorage("islogin");
+            if(islogin==1){
+                var identity=1;
+                var cardNo=getLocalStorage("cardno");
+                var pass=getLocalStorage("pass");
+                var facId=$(this).data("id");
+                var data={
+                    identity: identity,
+                    cardNo: cardNo,
+                    pass: pass,
+                    facId: facId
+                }
+                var url="IcCardWebService/deleteCollete";
+                ajaxGetRequest(url, data, callback);
+                function callback(result) {
+                    var a=processData(result);
+                    if(a.success){
+                       tipInformation("取消收藏成功！",function(){location.href=window.location.href;});
+                    }
+                }
+            }else{
+                tipInformation("请登陆！",function(){location.href="login.html";});
+            }
+        })
+        // 返回按钮
+        $(".back").on("click",function(){
+            var near_detail_return=getLocalStorage("near_detail_return");
+            if(near_detail_return==0){
+                location.href="index.html";
+            }else if(near_detail_return==1){
+                location.href="near_list.html";
+            }else if(near_detail_return==2){
+                location.href="collection.html";
+            }
+            
+        })
+
+    })
+    </script>
+</body>
+</html>

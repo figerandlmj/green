@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/login.css?v=2015102933">
+    <title>我要充值</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="fl back"></span>
+            <span>充值</span>
+        </div>
+        <div class="recharge-main">
+            <div class="money">
+                <label class="lab01">充值金额</label>
+                <label class="lab02">元</label>
+                <input type="text" name="" value="" placeholder="0.00" class="total_fee"/>
+            </div>
+            <div class="title">选择充值方式</div>
+            <div class="type">
+                <span class="span01"></span>
+                <label>支付宝</label>
+                <span class="selected"></span>
+            </div>
+            <div class="type type02">
+                <span class="span01"></span>
+                <label>微信钱包</label>
+                <span class="unselected"></span>
+            </div>
+            <div class="type type03">
+                <span class="span01"></span>
+                <label>银联</label>
+                <span class="not-open">暂未开通</span>
+            </div>
+            <div class="submit-btn">
+                <input type="submit" value="立即充值" class"submit-btn"/>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript">
+    $(function(){
+
+        // 选择支付方式
+        $("body").on("click",".unselected",function(){
+            $(this).parent().parent().find(".selected").removeClass("selected").addClass("unselected");
+            $(this).removeClass("unselected");
+            $(this).addClass("selected");
+        })
+
+        // 产生交易号
+        $(".submit-btn").on("click", function(){
+            var cardId=getLocalStorage("idcard");
+            var accName=getLocalStorage("name");
+            var accId=getLocalStorage("cardno");
+            var total_fee=$(".total_fee").val();
+            var data={
+                cardId: cardId,
+                accName: accName,
+                accId: accId,
+                total_fee:total_fee
+            }
+            var url="IcCardWebService/genTransNo";
+            if(total_fee<=0){
+                tipInformation("请输入正确的充值金额！",function(){});
+                return false;
+            }
+            ajaxGetRequest(url, data, callback);
+            function callback(result) {
+                var a=processData(result);
+                if(a.success){
+                    var transaction_no=a.message;//交易号
+                    recharge();
+                }
+            }
+        });
+
+        function recharge(){
+            // 账号充值
+            var this_url="http://180.96.17.120:8000/webservice/services/IcCardInfoWebService/getPayAccInfoByCardId";
+            $.ajax({
+                type: "GET",
+                url: this_url,
+                dataType: 'json',
+                crossDomain: true,
+                success: function(){}
+            });
+        }
+
+        // 返回按钮
+        $(".back").on("click",function(){
+            var recharge_return=getLocalStorage("recharge_return");
+            if(recharge_return==0){
+                location.href="personal.html";
+            }else if(recharge_return==1){
+                location.href="wallet.html";
+            }    
+        })
+
+    })
+    </script>
+</body>
+</html>

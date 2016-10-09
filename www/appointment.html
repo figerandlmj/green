@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css?v=2015102702">
+    <link rel="stylesheet" type="text/css" href="css/appoint.css?v=2015102933">
+    <link rel="stylesheet" type="text/css" href="css/slider/jquery-ui-1.8.21.custom.css?v=201510295">
+    <link rel="stylesheet" type="text/css" href="css/slider/style.css?v=201510295">
+    <title>我要充电</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a class="back"><span class="fl"></span></a>
+            <span>预约充电</span>
+        </div>
+        <div class="appointment-main">
+            <div class="date">
+                <label>充电开始于</label>
+                <span></span>
+                <input type="text" name="" value="" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',readOnly:true})" class="startTime"/>
+            </div>
+            <div class="time">
+                <label class="fl">30分钟</label>
+                <input type="text" name="" value="30分钟" class="amount" disabled/>
+                <label class="fr">5小时</label>
+            </div>
+            <div class="scroll">
+                <div class="slider sliderMin green" style="width:94%;margin:0 auto;"></div>
+            </div>
+            <div class="submit-btn">
+                <div class="btn">
+                    <span></span>
+                    <label>确定预约</label>
+                </div>
+            </div>
+            <div class="collection-title">个人收藏</div>
+            <div class="collection-con">
+                <!-- <div class="collection-list">
+                    <p class="p01">
+                        <label>安德门充电站安德门充电站安德门充电站</label>
+                        <span class="span01">1#直流桩</span>
+                        <span class="span02"></span>
+                        <span class="span02"></span>
+                        <span class="span02"></span>
+                        <span class="span02"></span>
+                        <span class="span02"></span>
+                    </p>
+                    <p class="p02">
+                        <span class="span01 fl"></span>
+                        <label class="label01 fl">安德门大街15号安德门大街15号安德门大街15号安德门大街15号</label>
+                        <label class="label02 fl"><em>3.223</em>km</label>
+                        <span class="span03"></span>
+                        <span class="span02"></span>
+                    </p>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script src="js/slider/jquery-migrate-1.0.0.min.js"></script>
+    <script src="js/slider/jquery-ui-1.10.0.custom.min.js"></script>
+    <script src="js/slider/jquery.ui.touch-punch.js"></script>
+    <script src="js/slider/bootstrap.min.js"></script>
+    <script src='js/slider/jquery.dataTables.min.js'></script>
+    <script src="js/slider/jquery.chosen.min.js"></script>
+    <script src="js/slider/jquery.uniform.min.js"></script>
+    <script src="js/slider/jquery.cleditor.min.js"></script>
+    <script src="js/slider/jquery.elfinder.min.js"></script>
+    <script src="js/slider/jquery.raty.min.js"></script>
+    <script src="js/slider/jquery.uploadify-3.1.min.js"></script>
+    <script src="js/slider/custom.js"></script>
+    <script type="text/javascript" src="slider/jquery.min.js"></script>
+    <script type="text/javascript" src="slider/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript">
+        $(function(){
+
+            // 当前时间
+            $(".startTime").val(nextDay(0));
+            // 充电时间
+            var lastTime=30*60*1000;
+            $( ".slider" ).slider({
+                range: "min",
+                value: 30,
+                min: 30,
+                max: 300,
+                step: 30,
+                slide: function( event, ui ) {
+                    $( ".amount" ).val(ui.value+"分钟" );
+                    lastTime=parseInt(ui.value)*60*1000;
+                }
+            });
+            $( ".amount" ).val( $( ".slider" ).slider( "value" )+"分钟");
+            // 预约充电2
+            function getAppointment(){
+                var identity=1;
+                var cardNo=getLocalStorage("cardno");
+                var pass=getLocalStorage("pass");
+                var data={
+                    identity: identity,
+                    cardNo: cardNo,
+                    pass: pass
+                }
+                var url="IcCardWebService/getPushInfo";
+                ajaxGetRequest(url, data, callback);
+                function callback(result) {
+                    var a=processData(result);
+                    if(a.list.length>0){
+                        for(var i=0;i<a.list.length;i++){
+                            if(a.list[i].requestResult){
+                                tipInformation("预约成功！",function(){});
+                                location.href="appointment_success.html";
+                            }
+                        }
+                    }
+                }
+            }
+            function setTime(){
+                getAppointment();
+                setTimeout("setTime()", 1000);
+            }
+            // 预约充电
+            function appointment(id){
+                var identity=1;
+                var type=1;
+                var cardNo=getLocalStorage("cardno");
+                var pass=getLocalStorage("pass");
+                var cardId=getLocalStorage("cardid");
+                var phoneNum=getLocalStorage("mobilePhone");
+                var str=$(".startTime").val();
+                var date=new Date(str);
+                var startTime=Date.parse(date);
+                var data={
+                    identity: identity,
+                    id:id,
+                    type: type,
+                    cardNo: cardNo,
+                    pass: pass,
+                    cardId: cardId,
+                    phoneNum: phoneNum,
+                    startTime: startTime,
+                    lastTime: lastTime
+                }
+                var url="IcCardWebService/bespeakPole";
+                ajaxGetRequest(url, data, callback);
+                function callback(result) {
+                    var a=processData(result);
+                    if(a.success){
+                        setTime(); 
+                    }else{
+                        tipInformation(a.message,function(){});
+                    }
+                }
+            }
+            // 预约充电
+            $(".btn").on("click",function(){
+                var id=getLocalStorage("station_id");
+                appointment(id);
+            })
+            // 个人收藏
+            var identity=1;
+            var cardNo=getLocalStorage("cardno");
+            var pass=getLocalStorage("pass");
+            var data={
+                identity: identity,
+                cardNo: cardNo,
+                pass: pass
+            }
+            var url="IcCardWebService/getMyCollect";
+            ajaxGetRequest(url, data, callback);
+            function callback(result) {
+                var a=processData(result);
+                if(a.success){
+                    var html = "";
+                    for(var i=0; i<a.stationlist.length; i++){
+                        html += '    <div class="collection-list">';
+                        html += '        <p class="p01 to-detail" data-id="'+a.stationlist[i].id+'">';
+                        html += '            <label>'+a.stationlist[i].name+'</label>';
+                        html += '            <span class="span01">1#直流桩</span>';
+                        html += '            <span class="span02"></span>';
+                        html += '            <span class="span02"></span>';
+                        html += '            <span class="span02"></span>';
+                        html += '            <span class="span02"></span>';
+                        html += '            <span class="span02"></span>';
+                        html += '        </p>';
+                        html += '        <p class="p02">';
+                        html += '            <span class="span01 fl to-detail" data-id="'+a.stationlist[i].id+'"></span>';
+                        html += '            <label class="label01 fl to-detail" data-id="'+a.stationlist[i].id+'">'+a.stationlist[i].addr+'</label>';
+                        html += '            <label class="label02 fl to-detail" data-id="'+a.stationlist[i].id+'"><em>'+a.stationlist[i].distance+'</em>km</label>';
+                        html += '            <span class="span03 appointment-btn" data-id="'+a.stationlist[i].id+'"></span>';
+                        html += '            <span class="span02"></span>';
+                        html += '        </p>';
+                        html += '    </div>';
+                    }
+                    $(".collection-con").html(html);
+                }
+            }
+            // 点击收藏进入充电站详情页
+            // $("body").on("click",".to-detail",function(){
+            //     var this_id=$(this).data("id");
+            //     setLocalStorage("station_id", this_id);
+            //     setLocalStorage("near_detail_return", 2);
+            //     location.href="near_detail.html";
+            // })
+            // 点击收藏的预约充电
+            $("body").on("click",".appointment-btn",function(){
+                var id=$(this).data("id");
+                // var id="303012015061600000000001";303012014111200000000002
+                appointment(id);
+            })
+            // 返回按钮
+            $(".back").on("click",function(){
+                var appointment_return=getLocalStorage("appointment_return");
+                if(appointment_return==0){
+                    location.href="index.html";
+                }else if(appointment_return==1){
+                    location.href="near_list.html";
+                }else if(appointment_return==2){
+                    location.href="collection.html";
+                }else if(appointment_return==3){
+                    location.href="near_detail.html";
+                }
+            })
+
+        });
+    </script>
+</body>
+</html>

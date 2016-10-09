@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/index.css?v=2015102110">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <title>订单-待支付</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <ul class="mui-flex">
+                <li class=" cell"><a href="order.html">当前预约<span class="order01">0</span></a></li>
+                <li class="cell"><a href="order_doing.html">充电中<span class="order02">0</span></a></li>
+                <li class="current cell"><a href="order_paid.html">待支付<span class="order03">0</span></a></li>
+                <li class="last cell"><a href="order_cancel.html">已取消<span class="order04">0</span></a></li>
+            </ul>
+        </div>
+        <div class="order-main order-paid-main">
+            <!-- <div class="list">
+                <p class="p1">
+                    <label>安德门充电站安德门充电站安德门充电站安德门充电站</label>
+                    <span class="span01">1#直流桩</span>
+                    <span class="fr span03"></span>
+                    <span class="fr span02"></span>
+                </p>
+                <p class="p2">
+                    <span class="fl"></span>
+                    <label class="label01 fl">安德门大街15号安德门大街15号安德门大街15号</label>
+                    <label class="label02 fl"><em class="fl">3.2345</em>km</label>
+                </p>
+                <div class="con">
+                    <div class="fl">
+                        <p class="p01">13:00</p>
+                        <p class="p02">2015/08/08</p>
+                    </div>
+                    <div class="center">
+                        <p class="p01"><em>共</em><label>2</label><em>小时</em></p>
+                        <p class="p02">苏A 8988J</p>
+                    </div>
+                    <div class="fr">
+                        <p class="p01">16:00</p>
+                        <p class="p02">2015/08/08</p>
+                    </div>
+                </div>
+                <div class="btn">
+                    <p>
+                        <label class="fl lab01">账单号：10001503175588</label>
+                        <label class="fr lab02">￥50.00</label>
+                    </p>
+                    <div class="clearfix"></div>
+                    <div class="submit-btn">支付</div>
+                </div>
+            </div> -->
+        </div>
+        <div class="order-cancel-main">
+            <p class="img"></p>
+            <p class="txt">亲，您当前没有待支付的预约哦</p>
+        </div>
+        <div class="footer">
+            <ul class="mui-flex">
+                <li class="li01 cell"><a href="index.html"><span></span></a></li>
+                <li class="li02-current current cell to-order"><a><span></span></a></li>
+                <li class="li03 cell to-appointment"><a><span></span></a></li>
+                <li class="li04 cell" onclick="inputScan();" id="btn"><a href="javascript:void(0);"><span></span></a></li>
+                <li class="li05 cell"><a href="common_function.html"><span></span></a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- 支付方式选择框 -->
+    <div class="pay-mask" style="background: #000;opacity: 0.37;position: absolute;width: 100%;height: 100%;top: 0;z-index: 99999998;display:none;"></div>
+    <div id="pay-tip" style="width:188px;position:absolute;left:25%;top:25%;z-index: 99999999;display:none;">
+        <p style="padding-top:17px;height:90px;background:#fff;width:100%;text-align:left;line-height:30px;font-size:1rem;font-weight:bold;">
+            <input type="radio" name="pay" value="1" checked="checked" style="margin-left:50px;"/>余额<br>
+            <input type="radio" name="pay" value="2" style="margin-left:50px;"/>支付宝
+        </p>
+        <div style="width:100%;height:50px;background:#fff;">
+            <div style="color:#fff;font-size:1em;width:110px;height:28px;background:#59a42c;border-radius:30px;text-align:center;line-height:28px;margin:0 auto;" id="pay-closeTip">确定</div>
+        </div>
+    </div>
+    <!-- 余额支付密码输入框 -->
+    <div class="pass-mask" style="background: #000;opacity: 0.37;position: absolute;width: 100%;height: 100%;top: 0;z-index: 99999998;display:none;"></div>
+    <div id="pass-tip" style="width:188px;position:absolute;left:25%;top:25%;z-index: 99999999;display:none;">
+        <p style="padding-top:17px;height:90px;background:#fff;width:100%;text-align:left;line-height:30px;font-size:1rem;font-weight:bold;">
+            <input type="password" name="password" value="" style="margin-left:10px;height:30px;padding:0px 4px;" placeholder="初始密码默认为888888"/>
+        </p>
+        <div style="width:100%;height:50px;background:#fff;">
+            <div style="color:#fff;font-size:1em;width:110px;height:28px;background:#59a42c;border-radius:30px;text-align:center;line-height:28px;margin:0 auto;" id="pass-closeTip">确定</div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/barcodescanner.js"></script>
+    <script type="text/javascript">
+    $(function(){
+        //支付方式选择框居中 
+        boxCenter("#pay-tip");
+        boxCenter("#pass-tip");
+        $(".pay-mask,.pass-mask").css({
+            "height":$("body").height()
+        })
+        // 点击遮罩层关闭支付方式选择框
+        $(".pay-mask").on("click",function(){
+            $("#pay-tip").hide();
+            $(".pay-mask").hide();
+        })
+        
+        // 点击遮罩层关闭密码输入框
+        $(".pass-mask").on("click",function(){
+            $("#pass-tip").hide();
+            $(".pass-mask").hide();
+        })
+        // 读取待支付订单
+        currentOrderPaid();
+        function currentOrderPaid(){
+            var identity=1;
+            var cardNo=getLocalStorage("cardno");
+            var pass=getLocalStorage("pass");
+            var car=getLocalStorage("car");
+            var data={
+                identity: identity,
+                cardNo: cardNo,
+                pass: pass
+            }
+            var url="IcCardWebService/queryCardBill";
+            ajaxGetRequest(url, data, callback);
+            function callback(result) {
+                var a=processData(result);
+                if(a.success){
+                    if(a.list.length<10){
+                        $(".order03").text(a.list.length);
+                    }else{
+                        $(".order03").addClass(".points");
+                        $(".order03").text("...");
+                    }
+                    if(a.list.length>0){
+                        var html = "";
+                        for(var i=0; i<a.list.length; i++){
+
+                            var startDate=formatterDate(parseInt(a.list[i].startTime));
+                            var startTime=formatterTime(parseInt(a.list[i].startTime));
+                            var finishDate=formatterDate(parseInt(a.list[i].finishTime));
+                            var finishTime=formatterTime(parseInt(a.list[i].finishTime));
+                            var time=(parseInt(a.list[i].finishTime)-parseInt(a.list[i].startTime))/3600000;
+
+                            html += '<div class="list">';
+                            html += '    <p class="p1">';
+                            html += '        <label>安德门充电站</label>';
+                            html += '        <span class="span01">1#直流桩</span>';
+                            html += '        <span class="fr span03"></span>';
+                            html += '        <span class="fr span02"></span>';
+                            html += '    </p>';
+                            html += '    <p class="p2">';
+                            html += '        <span class="fl"></span>';
+                            html += '        <label class="label01 fl">安德门大街15号安德门大街15号安德门大街15号</label>';
+                            html += '        <label class="label02 fl"><em class="fl">3.2345</em>km</label>';
+                            html += '    </p>';
+                            html += '    <div class="con">';
+                            html += '        <div class="fl">';
+                            html += '            <p class="p01">'+startTime+'</p>';
+                            html += '            <p class="p02">'+startDate+'</p>';
+                            html += '        </div>';
+                            html += '        <div class="center">';
+                            html += '            <p class="p01"><em>共</em><label>'+time+'</label><em>小时</em></p>';
+                            html += '            <p class="p02">'+car+'</p>';
+                            html += '        </div>';
+                            html += '        <div class="fr">';
+                            html += '            <p class="p01">'+finishTime+'</p>';
+                            html += '            <p class="p02">'+finishDate+'</p>';
+                            html += '        </div>';
+                            html += '    </div>';
+                            html += '    <div class="btn">';
+                            html += '        <p>';
+                            html += '            <label class="fl lab01">账单号：'+a.list[i].billId+'</label>';
+                            html += '            <label class="fr lab02">￥'+a.list[i].cost+'</label>';
+                            html += '        </p>';
+                            html += '        <div class="clearfix"></div>';
+                            html += '        <div class="submit-btn" data-billid="'+a.list[i].billId+'" data-poleid="'+a.list[i].poleId+'" data-price="'+a.list[i].cost+'">支付</div>';
+                            html += '    </div>';
+                            html += '</div>';
+                        }
+                        $(".order-paid-main").html(html);
+                    }else{
+                        $(".order-cancel-main").show();
+                    }
+                }
+            }
+        }
+
+        // 获取当前预约
+        order();
+
+        // 读取我的充电
+        orderDoing();
+
+        // 读取已取消订单
+        orderCancel();
+
+        var billId;//未支付账单账单号
+        var poleId;//充电桩id号
+        var price;//总额
+        $("body").on("click",".submit-btn",function(){
+            billId=$(this).data("billid");
+            poleId=$(this).data("poleid");
+            price=$(this).data("price");
+            $(".pay-mask").show();
+            $("#pay-tip").show();
+        })
+        $("#pay-closeTip").on("click",function(){
+            var payType=$("input[name='pay']:checked").val();
+            // 余额支付
+            if(payType==1){
+                $(".pass-mask").show();
+                $("#pass-tip").show();
+            }else if(payType==2){   //支付宝支付
+                recharge(poleId,billId,price);
+            }
+        })
+
+        // 输入密码点确定
+        $("#pass-closeTip").on("click",function(){
+            balancePay(billId);
+        })
+        // 余额支付
+        function balancePay(billId){
+            var identity=1;
+            var cardId=getLocalStorage("cardid");
+            var payPass=$("input[name='password']").val();//默认密码
+            var data={
+                identity: identity,
+                billId: billId,
+                cardId: cardId,
+                payPass: payPass
+            }
+            var url="IcCardWebService/payChargeRecord";
+            ajaxGetRequest(url, data, callback);
+            function callback(result) {
+                var a=processData(result);
+                tipInformation(a.message,function(){});
+            }
+        }
+
+        // 返回支付宝信息
+        function recharge(poleId,billId,price){
+            var identity=1;
+            var accId=getLocalStorage("cardno");
+            var pass=getLocalStorage("pass");
+            var cardId=poleId;//充电桩id
+            var accType=1;
+            var data={
+                identity:identity,
+                accId: accId,
+                pass: pass,
+                cardId: cardId,
+                accType:accType
+            }
+            var url="IcCardWebService/getPayAccInfo";
+            ajaxGetRequest(url, data, callback);
+            function callback(result) {
+                var a=processData(result);
+                if(a.success){
+                    var partner=a.payAccInfo.partner;//你的商户PID可以在账户中查询
+                    var accId=a.payAccInfo.accId;//你的商户支付宝帐号
+                    var priKey=a.payAccInfo.priKey;//你生成的private key
+                    var notifyUrl=a.payAccInfo.notifyUrl;//异步通知URL
+                    apilay(billId,price,notifyUrl);
+                }
+            }
+        }
+
+        // 调支付宝
+        function apilay(transaction_no,price,notifyUrl){
+            window.alipay.pay(
+                {
+                    tradeNo: transaction_no,
+                    subject: "测试标题",
+                    body: "我是测试内容",
+                    price: price,
+                    notifyUrl: notifyUrl
+                }, 
+                function(successResults){}, 
+                function(errorResults){}
+            );
+        }
+
+    })
+    </script>
+</body>
+</html>
+
+
+

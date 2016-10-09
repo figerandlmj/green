@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+    <body>
+        <!--<script>
+with(document)with(body)with(insertBefore(createElement("script"),firstChild))setAttribute("exparams","category=&userid=&aplus&yunid=&asid=AQAAAABeGThWbqz8ZQAAAACNmJisDKn6iw==",id="tb-beacon-aplus",src=(location>"https"?"//s":"//a")+".tbcdn.cn/s/aplus_v2.js")
+</script>-->
+
+http://180.96.17.120/webservice/services/IcCardWebService/searchChargePole?lat=23&lon=34&radius=1&type=0&status=0&startTime=2015.10.3&endTime=2015.12.17&regId=""  response=application/json
+
+public String searchChargePole(Double lat, Double lon, Double radius, 
+      Integer type, Integer status,long startTime,long endTime,
+      String regId);
+
+
+
+<button id="hello">teshi</button>
+
+        <script type="text/javascript" src='http://cdn.bootcss.com/jquery/1.11.3/jquery.js'></script>
+        <script type="text/javascript">
+            $.ajax({
+                type:"get",
+                url: 'http://180.96.17.120/webservice/services/IcCardWebService/checkLogin?name=zmit&pass=123456&type=1&response=application/json',
+                // dataType: 'jsonp',
+                // jsonp: 'callback',
+                // jsonpCallback: 'dataHandler',
+                data:{
+                    // phone:'18130300007',
+                    // password: '123456'
+                },
+                success: function(result) {
+                    console.log(result);
+                }
+            })
+
+            $('#hello').click(function(){
+
+               var url = 'http://180.96.17.120/webservice/services/IcCardWebService/checkLogin?name=123456&pass=123456&type=1&response=application/json';  
+                $.ajax(url, {  
+                    data: {  
+                  // 'cityname': '襄阳',  
+                  // 'dtype': 'jsonp',  
+                  // 'key': 'xxxx',  
+                  // '_': new Date().getTime()  
+                    },  
+                    dataType: 'jsonp',  
+                    "contentType": "application/json; charset=utf-8",
+                    crossDomain: true,  
+                    success: function(data) {  
+                        console(data);
+                        var myJSONString = JSON.stringify(data);
+                        var myEscapedJSONString = myJSONString.replace(/\\n/g, "\\n")
+                                      .replace(/\\'/g, "\\'")
+                                      .replace(/\\"/g, "\\\"")
+                                      .replace(/\\&/g, "\\&")
+                                      .replace(/\\r/g, "\\r")
+                                      .replace(/\\t/g, "\\t")
+                                      .replace(/\\b/g, "\\b")
+                                      .replace(/\\f/g, "\\f");
+                                      
+// myEscapedJSONString is now ready to be POST'ed to the server. 
+                    }  
+                });  
+            });
+         
+
+
+
+        </script>
+
+    </body>
+</html>

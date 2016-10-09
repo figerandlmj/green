@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/appoint.css?v=2015102722">
+    <title>申请建桩</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="common_function.html"><span class="fl"></span></a>
+            <span>申请建桩</span>
+        </div>
+        <div class="request-pile-main">
+            <form action="common_function.html" method="post" enctype="multipart/form-data" onsubmit="return check()">
+                <div class="con">
+                    <p><label>申请人/单位<em>*</em></label><input type="text" name="" value="" placeholder="请输入申请人/单位名称" class="applyUnit"/></p>
+                    <p><label>联系人电话<em>*</em></label><input type="text" name="" value="" placeholder="请输入联系人电话" class="tel"/></p>
+                    <p><label>电子邮箱</label><input type="text" name="" value="" placeholder="请输入电子邮箱地址" class="email"/></p>
+                    <p><label>备注</label><input type="text" name="" value="" placeholder="请填写备注" class="remark"/></p>
+                </div>
+                <div class="btn">
+                    <input type="submit" value="提交" class="submit-btn"/>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript">
+        $(function(){
+
+            // 申请建桩
+            $(".submit-btn").on("click",function(){
+                var regContact =/^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;//联系方式正则
+                var regEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;//电子邮箱正则
+                var identity=1;
+                var cardNo=getLocalStorage("cardno");
+                var pass=getLocalStorage("pass");
+                var applyUnit=$(".applyUnit").val();
+                var email=$(".email").val();
+                var tel=$(".tel").val();
+                var remark=$(".remark").val();
+                var data={
+                    identity: identity,
+                    cardNo: cardNo,
+                    pass: pass,
+                    applyUnit: applyUnit,
+                    tel: tel,
+                    email: email,
+                    remark: remark
+                }
+                var url="IcCardWebService/applyStation";
+                if(applyUnit==""){
+                    tipInformation("请输入申请人/单位名称！",function(){});
+                    return false;
+                }else if(tel==""){
+                    tipInformation("请输入联系人电话！",function(){});
+                    return false;
+                }else if(!regContact.test(tel)){
+                    tipInformation("请输入正确的联系方式！",function(){});
+                    return false;
+                }else if(email==""){
+                    tipInformation("请输入电子邮箱地址！",function(){});
+                    return false;
+                }else if(!regEmail.test(email)){
+                    tipInformation("请输入正确的电子邮箱！",function(){});
+                    return false;
+                }
+                ajaxGetRequest(url, data, callback);
+                function callback(result) {
+                    var a=processData(result);
+                    tipInformation(a.message,function(){});
+                }
+            })
+
+        })
+    </script>
+</body>
+</html>

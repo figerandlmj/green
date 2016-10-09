@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="slider/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="slider/style.css">
+    <title>扫描充电</title>
+</head>
+    <body>
+        <p>
+            <label for="amount">最大价格：</label>
+            <input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;">
+        </p>
+
+        <div id="slider-range-min"></div>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="slider/jquery.min.js"></script>
+        <script type="text/javascript" src="slider/jquery-ui.min.js"></script>
+        <script>
+            $(function() {
+                $( "#slider-range-min" ).slider({
+                    range: "min",
+                    value: 30,
+                    min: 1,
+                    max: 700,
+                    step: 50,
+                    slide: function( event, ui ) {
+                        $( "#amount" ).val( "$" + ui.value );
+                    }
+                });
+                $( "#amount" ).val( "$" + $( "#slider-range-min" ).slider( "value" ) );
+            });
+        </script>
+    </body>
+</html>

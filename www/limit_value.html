@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/appoint.css?v=2015101310">
+    <link rel="stylesheet" type="text/css" href="css/slider/jquery-ui-1.8.21.custom.css?v=201510295">
+    <link rel="stylesheet" type="text/css" href="css/slider/style.css?v=201510295">
+    <title>设置限值</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="order_doing.html"><span class="fl"></span></a>
+            <span>设置限值</span>
+        </div>
+        <div class="limit-main">
+            <div class="box01">
+                <p class="title">定时充电</p>
+                <p class="switch off"></p>
+                <p class="title">此刻开始在这里充电</p>
+                <input type="text" name="" value="" onfocus="WdatePicker({dateFmt:'HH:mm',readOnly:true})" class="con startTime"/>
+            </div>
+            <div class="box02">
+                <p class="title">功率设置</p>
+                <p class="txt-p"><input name="" value="50%" class="text amount"/></p>
+                <div class="roll-bar">
+                    <div class="slider sliderMin green" style="width:94%;margin:0 auto;"></div>
+                </div>
+            </div>
+            <div class="btn">
+                <a href="order_doing.html"><span>取消</span></a>
+                <span class="confirm">确认</span>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script src="js/slider/jquery-migrate-1.0.0.min.js"></script>
+    <script src="js/slider/jquery-ui-1.10.0.custom.min.js"></script>
+    <script src="js/slider/jquery.ui.touch-punch.js"></script>
+    <script src="js/slider/bootstrap.min.js"></script>
+    <script src='js/slider/jquery.dataTables.min.js'></script>
+    <script src="js/slider/jquery.chosen.min.js"></script>
+    <script src="js/slider/jquery.uniform.min.js"></script>
+    <script src="js/slider/jquery.cleditor.min.js"></script>
+    <script src="js/slider/jquery.elfinder.min.js"></script>
+    <script src="js/slider/jquery.raty.min.js"></script>
+    <script src="js/slider/jquery.uploadify-3.1.min.js"></script>
+    <script src="js/slider/custom.js"></script>
+    <script type="text/javascript" src="slider/jquery.min.js"></script>
+    <script type="text/javascript" src="slider/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/My97DatePicker/WdatePicker.js"></script>
+    
+    <script type="text/javascript">
+        $(function(){
+
+            // 开关按钮
+            $(".switch").on("click",function(){
+                if($(this).hasClass("open")){
+                    $(this).removeClass("open");
+                    $(this).addClass("off");
+                }else{
+                    $(this).removeClass("off");
+                    $(this).addClass("open");
+                }
+            })
+            // 开始时间
+            var startTime=getLocalStorage("startTime");
+            $(".startTime").val(startTime);
+            // 功率设置
+            var pwm=50;
+            $( ".slider" ).slider({
+                range: "min",
+                value: 50,
+                min: 25,
+                max: 100,
+                step: 5,
+                slide: function( event, ui ) {
+                    $( ".amount" ).val(ui.value+"%" );
+                    pwm=parseInt(ui.value);
+                    if(pwm>=25 && pwm<40){
+                        pwm=25;
+                    }else if(pwm>=40 && pwm<70){
+                        pwm=50;
+                    }else if(pwm>=70 && pwm<=100){
+                        pwm=100;
+                    }
+                }
+            });
+            $( ".amount" ).val( $( ".slider" ).slider( "value" )+"%");
+            // 设置限值
+            $(".confirm").on("click",function(){
+                var identity=1;
+                var cardNo=getLocalStorage("cardno");
+                var pass=getLocalStorage("pass");
+                var poleId=getLocalStorage("poleId");
+                var value=getLocalStorage("minutes");
+                var type=2;
+                var data={
+                    identity: identity,
+                    cardNo: cardNo,
+                    pass: pass,
+                    poleId: poleId,
+                    value: value,
+                    type: type,
+                    pwm: pwm
+                }
+                var url="IcCardWebService/setChargeParams";
+                ajaxGetRequest(url, data, callback);
+                function callback(result) {
+                    var a=processData(result);
+                    tipInformation(a.message,function(){});
+                }
+            })
+
+        })
+    </script>
+</body>
+</html>

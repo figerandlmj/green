@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/login.css?v=2015101310">
+    <title>车辆信息列表</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="personal.html"><span class="fl"></span></a>
+            <span>车辆信息</span>
+            <a href="car_detail.html"><span class="fr fr-add"></span></a>
+        </div>
+        <div class="register-main carlist-main">
+            <a href="car_detail.html">
+                <div class="input-main">
+                    <p class="p01">
+                        <!-- <span class="fl">北汽<br/><label>ES210</label></span> -->
+                        <span class="fl">北汽ES210</span>
+                        <span class="fr arrow"></span>
+                        <span class="fr num">h78659</span>
+                        <span class="fr status">审核中</span>
+                    </p>
+                </div>
+            </a>
+            <a href="car_detail.html">
+                <div class="input-main">
+                    <p class="p01">
+                        <span class="fl">北汽ES210</span>
+                        <span class="fr arrow"></span>
+                        <span class="fr num">h78659</span>
+                        <span class="fr status">审核中</span>
+                    </p>
+                </div>
+            </a>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript">
+    $(function(){
+
+        // 我的爱车
+        var identity=1;
+        var cardNo=getLocalStorage("cardno");
+        var pass=getLocalStorage("pass");
+        var data={
+            identity: identity,
+            cardNo: cardNo,
+            pass: pass
+        }
+        var url="IcCardWebService/getMyCar";
+        ajaxGetRequest(url, data, callback);
+        function callback(result) {
+            var a=processData(result);
+            tipInformation(a.message,function(){});
+            if(a.success){
+                var html = "";
+                for(var i=0; i<a.list.length; i++){
+                    html += '    <div class="input-main">';
+                    html += '        <p class="p01">';
+                    html += '            <span class="fl">'+a.list[i].carTypeName+'</span>';
+                    html += '            <span class="fr arrow"></span>';
+                    html += '            <span class="fr num">'+a.list[i].carNo+'</span>';
+                    html += '            <span class="fr status">'+a.list[i].status+'</span>';
+                    html += '        </p>';
+                    html += '    </div>';
+                }
+                $(".carlist-main").html(html);
+            }
+        }
+
+    })
+    </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/login.css?v=2015101310">
+    <title>登录</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="index.html"><span class="fl"></span></a>
+            <span>登录</span>
+            <a href="register.html"><span class="fr fr-center">注册</span></a>
+        </div>
+        <div class="register-main login-main">
+            <div class="input-main">
+                <p class="p02"><span></span><input name="" value="" type="text" placeholder="请输入手机号" class="telephone"/></p>
+                <p class="p04"><span></span><input name="" value="" type="password" placeholder="请输入密码" class="pass"/></p>
+            </div>
+            <div class="forget-password"><a href="password.html">忘记密码？</a></div>
+            <div class="clearfix"></div>
+            <div class="submit-btn">
+                <input type="submit" value="登录" class="login-btn"/>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/jquery.md5.js"></script> 
+    <script type="text/javascript">
+    $(function(){
+
+        // 登陆
+        $(".login-btn").on("click", function(){
+            var regPhone = /^1[34578]\d{9}$/ ;//手机号正则
+            var telephone=$(".telephone").val();
+            var input_pass=$(".pass").val();
+            var pass=$.md5(input_pass);
+            var data={
+                name: telephone,
+                pass: pass,
+                type: 1
+            }
+            var url="IcCardWebService/checkLogin";
+            if(telephone==""){
+                tipInformation("请输入手机号！",function(){});
+                return false;
+            }else if(!regPhone.test(telephone)){
+                tipInformation("请输入正确的手机号！",function(){});
+                return false;
+            }else if(input_pass==""){
+                tipInformation("请输入密码！",function(){});
+                return false;
+            }else if(input_pass.length<6||input_pass.length>18){
+                tipInformation("密码的长度在6-18位之间",function(){});
+                return false;
+            }
+            ajaxGetRequest(url, data, callback);
+            function callback(result) {
+                var a=processData(result);
+                if(a.success){
+                    setLocalStorage("cardno", a.cardinfo.cardno);
+                    setLocalStorage("pass", pass);
+                    setLocalStorage("idcard", a.cardinfo.idcard);
+                    setLocalStorage("car", a.cardinfo.car);
+                    setLocalStorage("mobilePhone", a.cardinfo.mobilePhone);
+                    setLocalStorage("name", a.cardinfo.name);
+                    setLocalStorage("islogin", 1);
+                    for(var i=0;i<a.list.length;i++){
+                        if(a.list[i].isdefaultt){
+                            setLocalStorage("cardid", a.list[i].cardno);
+                            setLocalStorage("haveMoney", a.list[i].haveMoney);
+                        }
+                    }
+                    location.href="personal.html";
+                }else{
+                    tipInformation(a.message,function(){});
+                }
+            }
+        });
+
+    })
+    </script>
+</body>
+</html>

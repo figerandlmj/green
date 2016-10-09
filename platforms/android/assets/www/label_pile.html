@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/appoint.css?v=2015102833">
+    <title>标注桩</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="common_function.html"><span class="fl"></span></a>
+            <span>标注桩</span>
+        </div>
+        <!-- 地图-->
+        <div id="allmap01"></div>
+        <!-- end地图-->
+        <div class="label-pile-main">
+            <form action="common_function.html" method="post" enctype="multipart/form-data" onsubmit="return check()">
+                <p class="p01">
+                    <input type="text" name="" value="" class="position-address"/>
+                    <span></span>
+                </p>
+                <p class="p02">
+                    <label>名称</label>
+                    <input type="text" name="" value="" placeholder="请输入充电站名称" class="staName"/>
+                </p>
+                <div class="p03">
+                    <label>电桩类型</label>
+                    <div>
+                        <span class="select01">国标</span>
+                        <span class="select02 on">特斯拉</span>
+                    </div>
+                </div>
+                <div class="p04">
+                    <label>快充数</label>
+                    <input type="text" name="" value="" placeholder="请输入" class="input01 chargeNum"/>
+                    <label>慢充数</label>
+                    <input type="text" name="" value="" placeholder="请输入" class="poelNum"/>
+                </div>
+                <p class="p05">
+                    <label>停车费</label>
+                    <input type="text" name="" value="" placeholder="请输入停车费用" class="parkMon"/>
+                </p>
+                <p class="p06">
+                    <label>服务费</label>
+                    <input type="text" name="" value="" placeholder="请输入服务费用" class="serviceMon"/>
+                </p>
+                <div class="submit">
+                    <input type="text" name="" value="" placeholder="补充信息（选填）" class="input01 remark"/>
+                    <input type="submit" value="提交" class="input02 submit-btn"/>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=EF505c8299ab5f1c2a98caf47b8d5c07&callback"></script>
+    <script type="text/javascript">
+        $(function(){
+
+            // 百度地图API功能
+            baiduMap("allmap01");
+            //创建标注图标
+            // var myIcon = new BMap.Icon("img/pile.png", new BMap.Size(77,92));
+            // var marker = new BMap.Marker(point,{icon:myIcon});  // 创建标注
+            // map.addOverlay(marker);// 将标注添加到地图中
+
+            // 选择类型
+            var poleType=1;
+            $(".select01").on("click",function(){
+                if($(this).hasClass("on")){
+                    $(this).removeClass("on");
+                    $(".select02").addClass("on");
+                }
+                poleType=1;
+            })
+            $(".select02").on("click",function(){
+                if($(this).hasClass("on")){
+                    $(this).removeClass("on");
+                    $(".select01").addClass("on");
+                }
+                poleType=2;
+            })
+            // 标注桩
+            $(".submit-btn").on("click",function(){
+                var identity=1;
+                var cardNo=getLocalStorage("cardno");
+                var pass=getLocalStorage("pass");
+                var staName=$(".staName").val();
+                var poelNum=$(".poelNum").val();
+                var chargeNum=$(".chargeNum").val();
+                var parkMon=$(".parkMon").val();
+                var serviceMon=$(".serviceMon").val();
+                var remark=$(".remark").val();
+                var data={
+                    identity: identity,
+                    cardNo: cardNo,
+                    pass: pass,
+                    addr: addr,
+                    staName: staName,
+                    poleType: poleType,
+                    poelNum: poelNum,
+                    chargeNum: chargeNum,
+                    parkMon: parkMon,
+                    serviceMon: serviceMon,
+                    lat: lat,
+                    lon: lon,
+                    remark: remark
+                }
+                var url="IcCardWebService/addStation";
+                if(staName==""){
+                    tipInformation("请输入充电站名称！",function(){});
+                    return false;
+                }else if(poelNum==""){
+                    tipInformation("请输入慢充数！",function(){});
+                    return false;
+                }else if(chargeNum==""){
+                    tipInformation("请输入快充数！",function(){});
+                    return false;
+                }else if(parkMon==""){
+                    tipInformation("请输入停车费！",function(){});
+                    return false;
+                }else if(serviceMon==""){
+                    tipInformation("请输入服务费！",function(){});
+                    return false;
+                }
+                ajaxGetRequest(url, data, callback);
+                function callback(result) {
+                    var a=processData(result);
+                    tipInformation(a.message,function(){});
+                }
+            })
+
+        })
+    </script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/appoint.css?v=2015102722">
+    <title>我的收藏</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="common_function.html"><span class="fl"></span></a>
+            <span>我的收藏</span>
+        </div>
+        <div class="collection-main">
+           <!--  <div class="collection-list">
+                <div class="top">
+                    <p class="p01">
+                        <label>翠屏山充电站翠屏山充电站翠屏山充电站</label>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </p>
+                    <p class="p02">
+                        <label class="label01">机场线翠屏山站机场线翠屏山站机场线翠屏山站</label>
+                        <label class="label02"><em class="fl">1.2235</em>km</label>
+                    </p>
+                </div>
+                <div class="bottom">
+                    <span class="span01"></span>
+                    <span class="span02"></span>
+                    <span class="span03"></span>
+                    <span class="span04"></span>
+                    <a href="near_detail.html"><span class="span05"></span></a>
+                </div>
+            </div> -->
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript">
+    $(function(){
+
+        // 我的收藏
+        var identity=1;
+        var cardNo=getLocalStorage("cardno");
+        var pass=getLocalStorage("pass");
+        var data={
+            identity: identity,
+            cardNo: cardNo,
+            pass: pass
+        }
+        var url="IcCardWebService/getMyCollect";
+        ajaxGetRequest(url, data, callback);
+        function callback(result) {
+            var a=processData(result);
+            if(a.success){
+                var html = "";
+                for(var i=0; i<a.stationlist.length; i++){
+                    html += '<div class="collection-list">';
+                    html += '    <div class="top">';
+                    html += '        <p class="p01">';
+                    html += '            <label>'+a.stationlist[i].name+'</label>';
+                    html += '            <span></span>';
+                    html += '            <span></span>';
+                    html += '            <span></span>';
+                    html += '            <span></span>';
+                    html += '            <span></span>';
+                    html += '        </p>';
+                    html += '        <p class="p02">';
+                    html += '            <label class="label01">'+a.stationlist[i].addr+'</label>';
+                    html += '            <label class="label02"><em class="fl">'+a.stationlist[i].distance+'</em>km</label>';
+                    html += '        </p>';
+                    html += '    </div>';
+                    html += '    <div class="bottom">';
+                    html += '        <span class="span01 navigation" data-lat="'+a.stationlist[item].lat+'" data-lon="'+a.stationlist[item].lon+'"></span>';
+                    html += '        <span class="span02 appointment-btn" data-id="'+a.stationlist[i].id+'"></span>';
+                    html += '        <span class="span03"><a href="tel:'+a.stationlist[i].telephone+'"></a></span>';
+                    html += '        <span class="span04 cancel-heart" data-id="'+a.stationlist[i].id+'"></span>';
+                    html += '        <span class="span05 to-detail" data-id="'+a.stationlist[i].id+'"></span>';
+                    html += '    </div>';
+                    html += '</div>';
+                }
+                $(".collection-main").html(html);
+            }
+        }
+
+        // 点击收藏预约进入我要充电页
+        $("body").on("click",".appointment-btn",function(){
+            var this_id=$(this).data("id");
+            setLocalStorage("station_id", this_id);
+            setLocalStorage("appointment_return", 2);
+            location.href="appointment.html";
+        })
+        // 点击收藏进入充电站详情页
+        $("body").on("click",".to-detail",function(){
+            var this_id=$(this).data("id");
+            setLocalStorage("station_id", this_id);
+            setLocalStorage("near_detail_return", 2);
+            location.href="near_detail.html";
+        })
+        // 取消收藏
+        $("body").on("click",".cancel-heart",function(){
+            var identity=1;
+            var cardNo=getLocalStorage("cardno");
+            var pass=getLocalStorage("pass");
+            var facId=$(this).data("id");
+            var data={
+                identity: identity,
+                cardNo: cardNo,
+                pass: pass,
+                facId: facId
+            }
+            var url="IcCardWebService/deleteCollete";
+            ajaxGetRequest(url, data, callback);
+            function callback(result) {
+                var a=processData(result);
+                if(a.success){
+                   tipInformation("取消收藏成功！",function(){location.href=window.location.href;});
+                }
+            }
+        })
+        // 点击进入导航页
+        $("body").on("click",".navigation",function(){
+            setLocalStorage("endlon", $(this).data("lon"));
+            setLocalStorage("endlat", $(this).data("lat"));
+            setLocalStorage("navigation_map_return",3);
+            location.href="navigation_map.html";
+        })
+
+    })
+    </script>
+</body>
+</html>

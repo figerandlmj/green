@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/login.css?v=2015101310">
+    <title>车辆信息详情</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="car_list.html"><span class="fl"></span></a>
+            <span>车辆信息</span>
+        </div>
+        <div class="personal-main register-main information-main cardetail-main">
+            <form action="" method="post" enctype="multipart/form-data" id="myForm">
+                <div class="clearfix"></div>
+                <div class="top">请填写如下信息（必填）</div>
+                <div class="my line-height">
+                    <span class="span02">品牌车型</span>
+                    <span class="span03"></span>
+                    <input type="text" value="" placeholder="请输入品牌车型" class="tip" id="carType"/>
+                    <!-- <span class="tip">北汽<br/><label>ES210</label></span> -->
+                </div>
+                <div class="my remove-top">
+                    <span class="span02">车架号</span>
+                    <span class="span03"></span>
+                    <input type="text" value="" placeholder="请输入车架号" class="tip" id="vin"/>
+                    <!-- <span class="tip">h78659</span> -->
+                </div>
+                <div class="my remove-top">
+                    <span class="span02">行驶证照片</span>
+                    <span class="span03"></span>
+                    <span class="tip">
+                        <img src="img/license_img.png" width="31px" height="31px" id="ImgPh"/>
+                        <input  type="file" name="pic" id="inputstyle"/>
+                    </span>
+                </div>
+                <div class="top">更多信息（选填）</div>
+                <div class="my remove-top">
+                    <span class="span02">车牌号</span>
+                    <span class="span03"></span>
+                    <input type="text" value="" placeholder="请输入车牌号" class="tip" id="carNo"/>
+                    <!-- <span class="tip">苏a9268l</span> -->
+                </div>
+                <div class="my remove-top">
+                    <span class="span02">发动机号</span>
+                    <span class="span03"></span>
+                    <input type="text" value="" placeholder="请输入发动机号" class="tip" id="engineNo"/>
+                    <!-- <span class="tip">678659</span> -->
+                </div>
+                <div class="submit-btn">
+                    <input type="button" value="提交" class="updata-btn"/>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/uploadPreview.min.js"></script>
+    <script type="text/javascript" src="js/uploadPreview.js"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script type="text/javascript" src="js/formValidatorRegex.js"></script>
+    <script type="text/javascript">
+    $(function(){
+
+        // 上传行驶证照片
+        $("#inputstyle").uploadPreview({ Img: "ImgPh", Height:31, Width:31, ImgType: ["gif", "jpeg", "jpg", "bmp", "png"], Callback: function () { }});
+
+        // 添加车辆
+        $(".submit-btn").on("click", function(){
+
+            var url="http://180.96.17.120:8000/webservice/services/IcCardWebService/addCar?response=application/json";
+            $("#myForm").attr("action", url);
+            
+            var identity=1;
+            var cardNo=getLocalStorage("cardno");
+            var pass=getLocalStorage("pass");
+            var carType=$("#carType").val();
+            var vin=$("#vin").val();
+            var carNo=$("#carNo").val();
+            var engineNo=$("#engineNo").val();
+            var data={
+                identity: identity,
+                cardNo: cardNo,
+                pass: pass,
+                carType:carType,
+                vin:tel,
+                carNo:carNo,
+                engineNo:engineNo
+            }
+
+            var options = {  
+               // target: '#output',          //把服务器返回的内容放入id为output的元素中      
+               // beforeSubmit: showRequest,  //提交前的回调函数  
+               // url: url,                   //默认是form的action， 如果申明，则会覆盖  
+               // type: "post",               //默认是form的method（get or post），如果申明，则会覆盖  
+               data:data,
+               dataType: "json",           //html(默认), xml, script, json...接受服务端返回的类型  
+               // crossDomain: true,
+               success: callback     //提交后的回调函数  
+               // clearForm: true,          //成功提交后，清除所有表单元素的值  
+               // resetForm: true,          //成功提交后，重置所有表单元素的值  
+               // timeout: 3000               //限制请求的时间，当请求大于3秒后，跳出请求  
+            }
+
+            if(carType=="" || vin== "" || carNo=="" || engineNo=="" || pic==""){
+                tipInformation("请完善信息！",function(){});
+                return false;
+            }
+
+            $("#myForm").ajaxSubmit(options);
+            function callback(result) {
+                var a=processData(result);
+                tipInformation(a.message,function(){});
+                if(a.success){
+                    location.href=window.location.href;
+                }
+            } 
+
+        });
+
+    })
+    </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="E:\wamp\www\green\platforms\android\build\intermediates\exploded-aar\android\CordovaLib\unspecified\debug\classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="f49cc919dc9c984da9936a39698692c44cda55a9">
+        <dex dex="E:\wamp\www\green\platforms\android\build\intermediates\pre-dexed\debug\classes-86457464dd8762fbf16d68d168fc60e17956b499.jar" />
+    </item>
+    <item
+        jar="E:\wamp\www\green\platforms\android\libs\com.google.zxing.client.android.captureactivity.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="daca75b7de34e1ca229682f2cd54b54e1c324be6">
+        <dex dex="E:\wamp\www\green\platforms\android\build\intermediates\pre-dexed\debug\com.google.zxing.client.android.captureactivity-533c395d9591ec06d9d994831ebbac4d38ed1d8d.jar" />
+    </item>
+
+</items>

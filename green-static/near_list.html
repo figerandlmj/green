@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/index.css?v=2015102933">
+    <title>附近-列表</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header mui-flex">
+            <div class="cell fixed">
+                <a href="personal.html"><span class="fl fl-href" id="islogin"></span></a>
+            </div>
+            <div class="search cell">
+                <from action="" method="POST">
+                    <input type="text" placeholder="搜索城市/位置/充电站名称"  />
+                    <input type="submit" class="search-button" value="">
+                </from>
+            </div>
+            <div class="cell fixed">
+                <span class="fr fr-add fr-href fr-href02 top-navigation"></span>
+            </div>
+        </div>
+        <!-- 列表-->
+        <!-- <div class="list">
+            <div class="img"><img src="img/station_img.png" width="107px" height="94px"/></div>
+            <div class="map-box01">
+                <div class="title">
+                    <label>安德门充电站安德门充电站安德门充电站安德门充电站</label>
+                    <span class="heart"></span>
+                    <span class="tel"></span>
+                </div>
+                <div class="clearfix"></div>
+                <div class="sum">直流桩5个</div>
+                <div class="content-container">
+                    <div class="content">
+                        <div class="fl left">
+                            <p class="p01">
+                                <label>服&nbsp;&nbsp;&nbsp;&nbsp;务</label>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </p>
+                            <p class="p02"><span class="fl"></span><em class="fl">安德门大街15号安德门大街15号安德门大街15号安德门大街15号</em><label class="fl distance">3.223</label><label class="fl">km</label></p>
+                        </div>
+                        <div class="fr right"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="bottom-href">
+                <a href="navigation_map.html">
+                    <div class="fl">
+                        <span class="span01"></span>
+                        <label>导 航</label>
+                    </div>
+                </a>
+                <a href="appointment.html">
+                    <div class="fr">
+                        <span class="span02"></span>
+                        <label>预约充电</label>
+                    </div>
+                </a>
+            </div>
+        </div> -->
+        <!-- end列表-->
+        <div class="footer">
+            <ul class="mui-flex">
+                <li class="li01-current current cell"><a href="index.html"><span></span></a></li>
+                <li class="li02 cell to-order"><a><span></span></a></li>
+                <li class="li03 cell to-appointment"><a><span></span></a></li>
+                <li class="li04 cell" onclick="inputScan();" id="btn"><a href="javascript:void(0);"><span></span></a></li>
+                <li class="li05 cell"><a href="common_function.html"><span></span></a></li>
+            </ul>
+        </div>
+        <!-- 地图-->
+        <div id="allmap" style="display:none;"></div>
+        <!-- end地图-->
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/barcodescanner.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=EF505c8299ab5f1c2a98caf47b8d5c07&callback"></script>
+    <script type="text/javascript">
+    $(function(){
+
+        // 显示风火轮
+        circleMask();
+
+        // 百度地图API功能
+        var map = new BMap.Map("allmap");
+        var geolocation = new BMap.Geolocation();
+        var lat,lon;  //经度和纬度
+        geolocation.getCurrentPosition(function(r){
+            if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                lat=r.point.lat;
+                lon=r.point.lng;
+                // 获取附近充电站
+                var url="StationWebService/searchChargePoleAll";
+                var data={
+                    lat:lat,
+                    lon:lon,
+                    radius:100,
+                    type:0,
+                    status:0,
+                    startTime:-1,
+                    endTime:-1,
+                    regid:""
+                }
+                ajaxGetRequest(url, data, callback);
+                function callback(result) {
+
+                    var a=processData(result);
+                    if(a.stationlist.length>0){
+                        setLocalStorage("station_id", a.stationlist[0].id);
+                        setLocalStorage("endlon", a.stationlist[0].lon);
+                        setLocalStorage("endlat", a.stationlist[0].lat);
+                        setLocalStorage("appointment_return", 1);
+                    }
+                    for(var i=0;i<a.stationlist.length;i++){
+
+                        (function(item){
+
+                            var html = "";
+                            html += '<div class="list">';
+                            html += '    <div class="img"><img src="img/station_img.png" width="107px" height="94px"/></div>';
+                            html += '    <div class="map-box01">';
+                            html += '        <div class="title">';
+                            html += '            <label>'+a.stationlist[item].name+'</label>';
+                            html += '            <span class="heart" data-id="'+a.stationlist[item].id+'"></span>';
+                            html += '            <span class="tel"><a href="tel:'+a.stationlist[item].telephone+'"></a></span>';
+                            html += '        </div>';
+                            html += '        <div class="clearfix"></div>';
+                            html += '        <div class="sum">直流桩5个</div>';
+
+                            html += '            <div class="content" data-id="'+a.stationlist[item].id+'">';
+                            html += '                <div class="fl left">';
+                            html += '                    <p class="p01">';
+                            html += '                        <label>服&nbsp;&nbsp;&nbsp;&nbsp;务</label>';
+                            html += '                        <span></span>';
+                            html += '                        <span></span>';
+                            html += '                        <span></span>';
+                            html += '                        <span></span>';
+                            html += '                    </p>';
+                            html += '                    <p class="p02"><span class="fl"></span><em class="fl">'+a.stationlist[item].addr+'</em><label class="fl distance">'+a.stationlist[item].distance+'</label><label class="fl">km</label></p>';
+                            html += '                </div>';
+                            html += '                <div class="fr right"></div>';
+                            html += '            </div>';
+
+                            html += '    </div>';
+                            html += '    <div class="clearfix"></div>';
+                            html += '    <div class="bottom-href">';
+                            html += '            <div class="fl navigation" data-lat="'+a.stationlist[item].lat+'" data-lon="'+a.stationlist[item].lon+'">';
+                            html += '                <span class="span01"></span>';
+                            html += '                <label>导 航</label>';
+                            html += '            </div>';
+
+                            html += '            <div class="fr appointment-btn" data-id="'+a.stationlist[item].id+'">';
+                            html += '                <span class="span02"></span>';
+                            html += '                <label>预约充电</label>';
+                            html += '            </div>';
+
+                            html += '    </div>';
+                            html += '</div>';
+
+                            var $html = $(html);
+                            $(".header").after($html);
+
+                        })(i);
+                    } 
+                }
+                // 关闭风火轮
+                $("#circle_mask").hide();
+                $("#circle_img").hide();
+
+            }else{
+                tipInformation('failed'+this.getStatus(),function(){});
+            }           
+        },{enableHighAccuracy: true})
+
+    })
+
+    // 点击进入充电站详情页
+    $("body").on("click",".content",function(){
+        var this_id=$(this).data("id");
+        setLocalStorage("station_id", this_id);
+        setLocalStorage("near_detail_return", 1);
+        location.href="near_detail.html";
+    })
+    // 点击预约充电进入我要充电页
+    $("body").on("click",".appointment-btn",function(){
+        var islogin = getLocalStorage("islogin");
+        if(islogin==1){
+            var this_id=$(this).data("id");
+            setLocalStorage("station_id", this_id);
+            setLocalStorage("appointment_return", 1);
+            location.href="appointment.html";
+        }else{
+            tipInformation("请登陆！",function(){location.href="login.html";});
+        }
+    })
+
+    // 点击进入导航页
+    $("body").on("click",".navigation",function(){
+        setLocalStorage("endlon", $(this).data("lon"));
+        setLocalStorage("endlat", $(this).data("lat"));
+        setLocalStorage("navigation_map_return",1);
+        location.href="navigation_map.html";
+    })
+    // 点击头部右侧进入导航页
+    $("body").on("click",".top-navigation",function(){
+        setLocalStorage("navigation_map_return",1);
+        location.href="navigation_map.html";
+    })
+    
+    // 添加收藏
+    $("body").on("click",".heart",function(){
+        var islogin = getLocalStorage("islogin");
+        if(islogin==1){
+            var identity=1;
+            var cardNo=getLocalStorage("cardno");
+            var pass=getLocalStorage("pass");
+            var facId=$(this).data("id");
+            var facType=1;
+            var data={
+                identity: identity,
+                cardNo: cardNo,
+                pass: pass,
+                facId: facId,
+                facType: facType
+            }
+            var url="IcCardWebService/addCollect";
+            ajaxGetRequest(url, data, callback);
+            function callback(result) {
+                var a=processData(result);
+                tipInformation(a.message,function(){});
+                if(a.success){
+                    $(this).addClass("hearted");
+                }
+            }
+        }else{
+            tipInformation("请登陆！",function(){location.href="login.html";});
+        }
+    })
+    // 有遮罩层时不可滑动页面
+    // document.body.addEventListener('touchmove', function (event) {
+    //     if(!$("#mask").is(":hidden")) {
+    //        event.preventDefault();
+    //     }
+    //     if(!$(".mask").is(":hidden")) {
+    //        event.preventDefault();
+    //     }
+    //     if(!$("#circle_mask").is(":hidden")) {
+    //        event.preventDefault();
+    //     }
+    // });
+    </script>
+</body>
+</html>
+
+
+

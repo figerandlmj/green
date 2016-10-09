@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name ="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/login.css?v=2015101310">
+    <title>个人中心</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="index.html"><span class="fl"></span></a>
+            <span>个人中心</span>
+        </div>
+        <div class="personal-main">
+            <a href="information.html">
+                <div class="member">
+                    <span class="img"><img src="img/avatar.png" width="70px" height="70px"/></span>
+                    <span class="msg"><label id="name"></label><br/><label id="mobilePhone"></label></span>
+                    <span class="arrow"></span>
+                </div>
+            </a>
+            <div class="member02">
+                <div class="wallet fl">
+                    <a href="wallet.html">
+                        <div class="left fl"><span></span><p>我的钱包</p></div>
+                    </a>
+                    <div class="right fr recharge"><p>￥<label id="haveMoney">0.0</label></p><span>充值</span></div>
+                </div>
+                <a href="news.html">
+                    <div class="news fr">
+                        <div class="center"><span></span><p>消息中心</p></div>
+                        <div class="news-num">0</div>
+                    </div>
+                </a>
+            </div>
+            <div class="clearfix"></div>
+            <a href="car_list.html">
+                <div class="my">
+                    <span class="span01"></span>
+                    <span class="span02">我的爱车</span>
+                    <span class="span03"></span>
+                    <span class="span04"></span>
+                </div>
+            </a>
+            <div class="my setting">
+                <span class="span01"></span>
+                <span class="span02">设置</span>
+                <span class="span03"></span>
+            </div>
+            <a href="about.html">
+                <div class="my about">
+                    <span class="span01"></span>
+                    <span class="span02">关于绿色出行</span>
+                    <span class="span03"></span>
+                </div>
+            </a>
+            <div class="submit-btn">
+                <input type="submit" value="退出登录" class="exit-login"/>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript">
+    $(function(){
+        // 个人信息
+        var name=getLocalStorage("name");
+        var mobilePhone=getLocalStorage("mobilePhone");
+        $("#name").text(name);
+        $("#mobilePhone").text(mobilePhone);
+
+        // 我的余额
+        getMyBalance();
+        function getMyBalance(){
+            var identity=1;
+            var cardNo=getLocalStorage("cardno");
+            var pass=getLocalStorage("pass");
+            var data={
+                identity: identity,
+                cardNo: cardNo,
+                pass: pass
+            }
+            var url="IcCardWebService/getMyCard";
+            ajaxGetRequest(url, data, callback);
+            function callback(result) {
+                var a=processData(result);
+                tipInformation(a.message,function(){});
+                if(a.success){
+                    $("#haveMoney").text(a.list.haveMoney);
+                }
+            }
+        }
+
+        // 消息中心
+        messageCenter();
+        function messageCenter(){
+            var identity=1;
+            var cardNo=getLocalStorage("cardno");
+            var pass=getLocalStorage("pass");
+            var data={
+                identity: identity,
+                cardNo: cardNo,
+                pass: pass
+            }
+            var url="IcCardWebService/getPushInfo";
+            ajaxGetRequest(url, data, callback);
+            function callback(result) {
+                var a=processData(result);
+                tipInformation(a.message,function(){});
+                if(a.list.length>0){
+                    $(".news-num").text(a.list.length);
+                }
+            }
+        }
+        // 点击充值
+        $(".recharge").on("click",function(){
+            setLocalStorage("recharge_return",0);
+            location.href="wallet_recharge.html";
+        })
+
+    })
+    </script>
+</body>
+</html>
